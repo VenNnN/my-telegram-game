@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Clicker Game</title>
     <style>
+        html, body {
+            touch-action: manipulation;
+            -ms-touch-action: manipulation;
+            overflow: hidden;
+        }
+        body {
+            touch-action: pan-x pan-y;
+            -ms-touch-action: pan-x pan-y;
+        }
+        @supports (-webkit-overflow-scrolling: touch) {
+            body {
+                overflow: hidden;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
         body {
             font-family: Arial, sans-serif;
             text-align: center;
