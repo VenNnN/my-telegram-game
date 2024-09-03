@@ -6,43 +6,100 @@
     <title>Clicker Game</title>
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
             font-family: Arial, sans-serif;
+            text-align: center;
             background-color: #f0f0f0;
         }
         .container {
-            text-align: center;
+            margin-top: 50px;
         }
-        button {
+        #clickButton, #upgradeButton {
             padding: 10px 20px;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
         }
-        .count {
+        #clickButton {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #upgradeButton {
+            background-color: #f39c12;
+            color: white;
+        }
+        #levelDisplay, #coinDisplay, #clickValueDisplay, #upgradeCost {
             font-size: 24px;
-            margin-top: 20px;
+            margin: 20px;
+        }
+        #clickValueDisplay {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        #palaceIcon {
+            font-size: 50px;
+            color: #3498db;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <button id="clickButton">Click me!</button>
-        <div class="count">Clicks: <span id="clickCount">0</span></div>
+        <div id="coinDisplay">Coins: 0</div>
+        <button id="clickButton">Click</button>
+        <div id="clickValueDisplay">Coins per Click: 1</div>
+        <div id="levelDisplay">Level: 1</div>
+        <div id="upgradeCost">Upgrade Cost: 1</div>
+        <div id="palaceIcon">🏰</div>
+        <button id="upgradeButton">Upgrade Level</button>
     </div>
-    <script>
-        let count = 0;
-        const button = document.getElementById('clickButton');
-        const clickCount = document.getElementById('clickCount');
 
-        button.addEventListener('click', () => {
-            count++;
-            clickCount.textContent = count;
+    <script>
+        let coins = 0;
+        let level = 1;
+        let coinsPerClick = 1;
+        const upgradeCosts = [1, 10, 100, 1000, 10000];
+
+        const clickButton = document.getElementById('clickButton');
+        const upgradeButton = document.getElementById('upgradeButton');
+        const coinDisplay = document.getElementById('coinDisplay');
+        const levelDisplay = document.getElementById('levelDisplay');
+        const upgradeCost = document.getElementById('upgradeCost');
+        const clickValueDisplay = document.getElementById('clickValueDisplay');
+        const palaceIcon = document.getElementById('palaceIcon');
+
+        function updateDisplay() {
+            coinDisplay.textContent = `Coins: ${coins}`;
+            levelDisplay.textContent = `Level: ${level}`;
+            clickValueDisplay.textContent = `Coins per Click: ${coinsPerClick}`;
+            if (level <= 5) {
+                upgradeCost.textContent = `Upgrade Cost: ${upgradeCosts[level - 1]}`;
+            } else {
+                upgradeCost.textContent = `Max Level Reached`;
+            }
+        }
+
+        clickButton.addEventListener('click', () => {
+            coins += coinsPerClick;
+            updateDisplay();
         });
+
+        upgradeButton.addEventListener('click', () => {
+            if (level < 5 && coins >= upgradeCosts[level - 1]) {
+                coins -= upgradeCosts[level - 1];
+                level++;
+                coinsPerClick++;
+                updateDisplay();
+            } else if (level >= 5) {
+                alert('Max Level Reached');
+            } else {
+                alert('Not Enough Coins');
+            }
+        });
+
+        // Initial display
+        updateDisplay();
     </script>
 </body>
 </html>
