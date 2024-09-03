@@ -1,18 +1,16 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-image: url('images/back_2.jpeg');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
     text-align: center;
-}
-
-.container {
-    width: 90%;
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
+    color: #fff; /* Змінюємо кольори тексту на білий за замовчуванням */
 }
 
 #navbar {
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 button {
@@ -23,7 +21,7 @@ button {
     border: none;
     border-radius: 5px;
     background-color: #4CAF50;
-    color: white;
+    color: white; /* Колір тексту на кнопках білий */
 }
 
 #buildingsView .upgradeBtn {
@@ -35,17 +33,30 @@ button {
 }
 
 .building, .mine {
-    margin: 20px 0;
+    margin: 20px auto;
     padding: 10px;
-    background-color: #fff;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    vertical-align: top;
+    width: 250px; /* Adjust width as needed */
+    position: relative;
+    background: none; /* Remove white background */
+    box-shadow: none; /* Remove box shadow */
+}
+
+.building img, .mine img {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+}
+
+.info {
+    margin-top: 10px;
 }
 
 .tooltip {
     margin-top: 10px;
     font-size: 14px;
-    color: #555;
+    color: #fff; /* Колір тексту в підказках білий */
 }
 
 .progressContainer {
@@ -53,20 +64,20 @@ button {
     background-color: #ddd;
     border-radius: 5px;
     overflow: hidden;
-    height: auto; /* Adjust this based on your layout */
+    height: auto;
     width: 100%;
 }
 
 .progressBar {
-    height: 20px; /* Adjust based on your needs */
+    height: 20px;
     background-color: #4CAF50;
     width: 0%;
     transition: width 0.5s;
-    margin: 2px 0; /* Adds space between progress bars */
+    margin: 2px 0;
 }
 
 .progressTimer {
     margin-top: 5px;
     font-size: 14px;
-    color: #333;
+    color: #fff; /* Колір таймера білий */
 }
