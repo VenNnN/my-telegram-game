@@ -2,225 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Clicker Game</title>
-    <style>
-        html, body {
-            touch-action: manipulation;
-            -ms-touch-action: manipulation;
-            overflow: hidden;
-        }
-        body {
-            touch-action: pan-x pan-y;
-            -ms-touch-action: pan-x pan-y;
-        }
-        @supports (-webkit-overflow-scrolling: touch) {
-            body {
-                overflow: hidden;
-                -webkit-overflow-scrolling: touch;
-            }
-        }
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f0f0;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        #clickButton, #upgradeButton, #resetButton {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
-        }
-        #clickButton {
-            background-color: #4CAF50;
-            color: white;
-        }
-        #upgradeButton {
-            background-color: #f39c12;
-            color: white;
-        }
-        #resetButton {
-            background-color: #e74c3c;
-            color: white;
-        }
-        #levelDisplay, #coinDisplay, #clickValueDisplay, #upgradeCost, #timerDisplay {
-            font-size: 24px;
-            margin: 20px;
-        }
-        #clickValueDisplay {
-            font-size: 18px;
-            margin-top: 10px;
-        }
-        #palaceIcon {
-            font-size: 50px;
-            color: #3498db;
-            cursor: pointer;
-        }
-        /* Disabled button style */
-        .disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        /* Progress bar style */
-        #progressContainer {
-            margin: 20px;
-            background-color: #ddd;
-            border-radius: 5px;
-            overflow: hidden;
-            height: 25px;
-            width: 80%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        #progressBar {
-            height: 100%;
-            background-color: #3498db;
-            width: 0%;
-            transition: width 0.1s;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Management Game</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <div id="coinDisplay">Coins: 0</div>
-        <button id="clickButton">Click</button>
-        <div id="clickValueDisplay">Coins per Click: 1</div>
-        <div id="levelDisplay">Level: 1</div>
-        <div id="upgradeCost">Upgrade Cost: 1</div>
-        <div id="palaceIcon">🏰</div>
-        <button id="upgradeButton" class="disabled">Upgrade Level</button>
-        <button id="resetButton">Reset All</button>
-        <div id="timerDisplay">Upgrade Timer: Not Active</div>
-        <div id="progressContainer">
-            <div id="progressBar"></div>
+        <div id="navbar">
+            <button id="buildingsViewBtn">Buildings</button>
+            <button id="minesViewBtn">Mines</button>
+        </div>
+
+        <!-- Buildings View -->
+        <div id="buildingsView" class="view">
+            <div id="palace" class="building">
+                <h3>Palace (Level <span id="palaceLevel">1</span>)</h3>
+                <button id="upgradePalace" class="upgradeBtn">Upgrade</button>
+                <div class="tooltip">Upgrade cost: <span id="palaceCost">100 food, 100 wood</span></div>
+                <div id="palaceProgress" class="progressContainer">
+                    <div id="palaceProgressBar" class="progressBar"></div>
+                    <div id="palaceProgressTimer" class="progressTimer"></div>
+                </div>
+            </div>
+
+            <div id="workerHouse" class="building">
+                <h3>Worker House (Level <span id="workerHouseLevel">1</span>)</h3>
+                <button id="upgradeWorkerHouse" class="upgradeBtn">Upgrade</button>
+                <div class="tooltip">Upgrade cost: <span id="workerHouseCost">50 food, 50 wood</span></div>
+                <div id="workerHouseProgress" class="progressContainer">
+                    <div id="workerHouseProgressBar" class="progressBar"></div>
+                    <div id="workerHouseProgressTimer" class="progressTimer"></div>
+                </div>
+            </div>
+
+            <div id="resourcesBalance">
+                <h3>Resources</h3>
+                <p>Food: <span id="foodBalance">0</span></p>
+                <p>Wood: <span id="woodBalance">0</span></p>
+                <p>Available Workers: <span id="availableWorkers">0</span></p>
+            </div>
+        </div>
+
+        <!-- Mines View -->
+        <div id="minesView" class="view" style="display:none;">
+            <div id="foodMine" class="mine">
+                <h3>Food Mine</h3>
+                <p>Available Workers: <span id="foodMineWorkers">0</span></p>
+                <button id="mineFood" class="mineBtn">Send Worker</button>
+                <div class="tooltip">Mining time: 5s, Gain: 100 food</div>
+                <div id="foodMineProgressContainer" class="progressContainer">
+                    <!-- Progress bars and timers will be added here dynamically -->
+                </div>
+            </div>
+
+            <div id="woodMine" class="mine">
+                <h3>Wood Mine</h3>
+                <p>Available Workers: <span id="woodMineWorkers">0</span></p>
+                <button id="mineWood" class="mineBtn">Send Worker</button>
+                <div class="tooltip">Mining time: 5s, Gain: 100 wood</div>
+                <div id="woodMineProgressContainer" class="progressContainer">
+                    <!-- Progress bars and timers will be added here dynamically -->
+                </div>
+            </div>
         </div>
     </div>
-
-    <script>
-        // Initialize game state from localStorage
-        function initializeGameState() {
-            return {
-                coins: parseInt(localStorage.getItem('coins')) || 0,
-                level: parseInt(localStorage.getItem('level')) || 1,
-                coinsPerClick: parseInt(localStorage.getItem('coinsPerClick')) || 1,
-                upgradeEndTime: parseInt(localStorage.getItem('upgradeEndTime')) || 0,
-                upgradeCosts: [1, 10, 100, 1000, 10000],
-                upgradeTimes: [0, 60000, 120000, 180000, 240000]
-            };
-        }
-
-        // Save game state to localStorage
-        function saveProgress(gameState) {
-            localStorage.setItem('coins', gameState.coins);
-            localStorage.setItem('level', gameState.level);
-            localStorage.setItem('coinsPerClick', gameState.coinsPerClick);
-            localStorage.setItem('upgradeEndTime', gameState.upgradeEndTime);
-        }
-
-        // Reset game state
-        function resetGame() {
-            localStorage.removeItem('coins');
-            localStorage.removeItem('level');
-            localStorage.removeItem('coinsPerClick');
-            localStorage.removeItem('upgradeEndTime');
-            gameState = initializeGameState(); // Reinitialize game state
-            updateDisplay();
-        }
-
-        function checkUpgradeAvailability() {
-            const now = Date.now();
-            if (gameState.upgradeEndTime > now) {
-                upgradeButton.classList.add('disabled');
-                upgradeButton.disabled = true;
-            } else {
-                upgradeButton.classList.remove('disabled');
-                upgradeButton.disabled = false;
-            }
-        }
-
-        function updateDisplay() {
-            coinDisplay.textContent = `Coins: ${gameState.coins}`;
-            levelDisplay.textContent = `Level: ${gameState.level}`;
-            clickValueDisplay.textContent = `Coins per Click: ${gameState.coinsPerClick}`;
-            if (gameState.level <= 5) {
-                upgradeCost.textContent = `Upgrade Cost: ${gameState.upgradeCosts[gameState.level - 1]}`;
-            } else {
-                upgradeCost.textContent = `Max Level Reached`;
-            }
-            updateTimer();
-            checkUpgradeAvailability();
-        }
-
-        function updateTimer() {
-            const now = Date.now();
-            if (gameState.upgradeEndTime > now) {
-                const remainingTime = gameState.upgradeEndTime - now;
-                const minutes = Math.floor((remainingTime / 1000 / 60) % 60);
-                const seconds = Math.floor((remainingTime / 1000) % 60);
-                timerDisplay.textContent = `Upgrade Timer: ${minutes}m ${seconds}s`;
-
-                // Update progress bar
-                const totalTime = gameState.upgradeTimes[gameState.level - 1];
-                const progress = 100 - (remainingTime / totalTime * 100);
-                progressBar.style.width = `${progress}%`;
-            } else {
-                timerDisplay.textContent = `Upgrade Timer: Not Active`;
-                progressBar.style.width = '100%'; // Full bar when timer is not active
-            }
-        }
-
-        let gameState = initializeGameState();
-
-        const clickButton = document.getElementById('clickButton');
-        const upgradeButton = document.getElementById('upgradeButton');
-        const resetButton = document.getElementById('resetButton');
-        const coinDisplay = document.getElementById('coinDisplay');
-        const levelDisplay = document.getElementById('levelDisplay');
-        const upgradeCost = document.getElementById('upgradeCost');
-        const clickValueDisplay = document.getElementById('clickValueDisplay');
-        const palaceIcon = document.getElementById('palaceIcon');
-        const timerDisplay = document.getElementById('timerDisplay');
-        const progressBar = document.getElementById('progressBar');
-
-        clickButton.addEventListener('click', () => {
-            gameState.coins += gameState.coinsPerClick;
-            updateDisplay();
-            saveProgress(gameState);
-        });
-
-        upgradeButton.addEventListener('click', () => {
-            if (gameState.level < 5 && gameState.coins >= gameState.upgradeCosts[gameState.level - 1]) {
-                gameState.coins -= gameState.upgradeCosts[gameState.level - 1];
-                gameState.level++;
-                gameState.coinsPerClick++;
-                gameState.upgradeEndTime = Date.now() + gameState.upgradeTimes[gameState.level - 1];
-                updateDisplay();
-                saveProgress(gameState);
-            } else if (gameState.level >= 5) {
-                alert('Max Level Reached');
-            } else {
-                alert('Not Enough Coins');
-            }
-        });
-
-        resetButton.addEventListener('click', () => {
-            if (confirm('Are you sure you want to reset all progress?')) {
-                resetGame();
-            }
-        });
-
-        // Update the display every second
-        setInterval(updateTimer, 1000);
-
-        // Initial display
-        updateDisplay();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

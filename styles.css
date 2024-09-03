@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#navbar {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+#buildingsView .upgradeBtn {
+    background-color: #f39c12;
+}
+
+#minesView .mineBtn {
+    background-color: #3498db;
+}
+
+.building, .mine {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.tooltip {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.progressContainer {
+    margin-top: 10px;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    height: auto; /* Adjust this based on your layout */
+    width: 100%;
+}
+
+.progressBar {
+    height: 20px; /* Adjust based on your needs */
+    background-color: #4CAF50;
+    width: 0%;
+    transition: width 0.5s;
+    margin: 2px 0; /* Adds space between progress bars */
+}
+
+.progressTimer {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+}
