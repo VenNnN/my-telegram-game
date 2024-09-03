@@ -71,9 +71,10 @@
     </div>
 
     <script>
-        let coins = 0;
-        let level = 1;
-        let coinsPerClick = 1;
+        // Retrieve saved data from localStorage
+        let coins = parseInt(localStorage.getItem('coins')) || 0;
+        let level = parseInt(localStorage.getItem('level')) || 1;
+        let coinsPerClick = parseInt(localStorage.getItem('coinsPerClick')) || 1;
         const upgradeCosts = [1, 10, 100, 1000, 10000];
 
         const clickButton = document.getElementById('clickButton');
@@ -95,9 +96,16 @@
             }
         }
 
+        function saveProgress() {
+            localStorage.setItem('coins', coins);
+            localStorage.setItem('level', level);
+            localStorage.setItem('coinsPerClick', coinsPerClick);
+        }
+
         clickButton.addEventListener('click', () => {
             coins += coinsPerClick;
             updateDisplay();
+            saveProgress();
         });
 
         upgradeButton.addEventListener('click', () => {
@@ -106,6 +114,7 @@
                 level++;
                 coinsPerClick++;
                 updateDisplay();
+                saveProgress();
             } else if (level >= 5) {
                 alert('Max Level Reached');
             } else {
