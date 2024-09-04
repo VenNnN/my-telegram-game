@@ -4,6 +4,16 @@ async function loadConfig() {
     return await response.json();
 }
 
+// Function to toggle visibility of additional information
+function toggleInfo(buildingId) {
+    const infoElement = document.getElementById(buildingId + 'Info');
+    if (infoElement.style.display === 'none') {
+        infoElement.style.display = 'block';
+    } else {
+        infoElement.style.display = 'none';
+    }
+}
+
 // Load configuration and initialize the game
 loadConfig().then(config => {
     let palaceLevel = loadState('palaceLevel', 1);
@@ -24,25 +34,10 @@ loadConfig().then(config => {
     let isUpgradingPalace = false;
     let isUpgradingWorkerHouse = false;
 
-    const buildingsViewBtn = document.getElementById('buildingsViewBtn');
-    const minesViewBtn = document.getElementById('minesViewBtn');
-    const buildingsView = document.getElementById('buildingsView');
-    const minesView = document.getElementById('minesView');
-
-    const palaceProgressTimer = document.getElementById('palaceProgressTimer');
-    const workerHouseProgressTimer = document.getElementById('workerHouseProgressTimer');
+    const palaceProgressTimer = document.getElementById('palaceProgress'); // Corrected ID
+    const workerHouseProgressTimer = document.getElementById('workerHouseProgress'); // Corrected ID
     const foodMineProgressContainer = document.getElementById('foodMineProgressContainer');
     const woodMineProgressContainer = document.getElementById('woodMineProgressContainer');
-
-    buildingsViewBtn.addEventListener('click', () => {
-        minesView.style.display = 'none';
-        buildingsView.style.display = 'block';
-    });
-
-    minesViewBtn.addEventListener('click', () => {
-        buildingsView.style.display = 'none';
-        minesView.style.display = 'block';
-    });
 
     document.getElementById('upgradePalace').addEventListener('click', () => {
         if (!isUpgradingPalace && palaceLevel < maxLevel && food >= palaceCosts[palaceLevel - 1] && wood >= palaceCosts[palaceLevel - 1]) {
@@ -81,6 +76,7 @@ loadConfig().then(config => {
     document.getElementById('mineFood').addEventListener('click', () => {
         if (availableWorkers > 0) {
             availableWorkers--;
+            saveState('availableWorkers', availableWorkers); // Save state after reducing workers
             startMining('food', foodMineProgressContainer);
             updateDisplay();
         } else {
@@ -91,6 +87,7 @@ loadConfig().then(config => {
     document.getElementById('mineWood').addEventListener('click', () => {
         if (availableWorkers > 0) {
             availableWorkers--;
+            saveState('availableWorkers', availableWorkers); // Save state after reducing workers
             startMining('wood', woodMineProgressContainer);
             updateDisplay();
         } else {
@@ -151,13 +148,13 @@ loadConfig().then(config => {
             const remainingTime = endTime - Date.now();
             if (remainingTime <= 0) {
                 clearInterval(interval);
-                timerElement.textContent = '';
+                timerElement.textContent = ''; // Clear the timer text
                 updateDisplay();
                 delete upgradeData[timerElement.id];
                 localStorage.setItem('upgradeData', JSON.stringify(upgradeData));
                 if (onComplete) onComplete();
             } else {
-                timerElement.textContent = `Time left: ${formatTime(remainingTime)}`;
+                timerElement.textContent = `Time left: ${formatTime(remainingTime)}`; // Update timer text
             }
         }, 100);
     }
@@ -172,6 +169,9 @@ loadConfig().then(config => {
         const time = miningTime;
         const endTime = Date.now() + time;
         saveMiningData(resource, endTime, timer.id);
+
+        // Save available workers in localStorage after assigning a worker
+        saveState('availableWorkers', availableWorkers);
         updateMiningTimer(timer, endTime);
     }
 
@@ -208,6 +208,8 @@ loadConfig().then(config => {
                     wood += resourceGain;
                 }
                 availableWorkers++;
+
+                // Save resources and available workers in localStorage
                 saveState('food', food);
                 saveState('wood', wood);
                 saveState('availableWorkers', availableWorkers);
@@ -232,8 +234,6 @@ loadConfig().then(config => {
         document.getElementById('foodBalance').textContent = food;
         document.getElementById('woodBalance').textContent = wood;
         document.getElementById('availableWorkers').textContent = availableWorkers;
-        document.getElementById('foodMineWorkers').textContent = availableWorkers;
-        document.getElementById('woodMineWorkers').textContent = availableWorkers;
         document.getElementById('palaceCost').textContent = `${palaceCosts[palaceLevel - 1]} food, ${palaceCosts[palaceLevel - 1]} wood`;
         document.getElementById('workerHouseCost').textContent = `${workerHouseCosts[workerHouseLevel - 1]} food, ${workerHouseCosts[workerHouseLevel - 1]} wood`;
 
@@ -245,7 +245,8 @@ loadConfig().then(config => {
     }
 
     function loadState(key, defaultValue) {
-        return parseInt(localStorage.getItem(key)) || defaultValue;
+        const value = localStorage.getItem(key);
+        return value !== null && !isNaN(value) ? parseInt(value) : defaultValue;
     }
 
     function saveState(key, value) {

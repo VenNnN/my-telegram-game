@@ -1,67 +1,138 @@
 body {
     font-family: Arial, sans-serif;
-    background-image: url('images/back_2.jpeg');
+    background-image: url('images/back.jpg');
     background-size: cover;
     background-position: center;
     margin: 0;
     padding: 0;
     text-align: center;
     color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#resourcesBalance {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2vw;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1vh 2vw;
+    border-radius: 10px;
+    font-size: 2vh;
+    margin: 1vh auto;
+    width: fit-content;
+    border: 1px solid white;
 }
 
 #navbar {
-    margin: 20px 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 1vh 2vw;
+    border-radius: 10px;
+    font-size: 2vh;
+    margin: 1vh auto;
+    width: fit-content;
+    border: 1px solid white;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 1vh 2vw;
+    font-size: 2vh;
     cursor: pointer;
-    margin: 5px;
+    margin: 1vh;
     border: none;
     border-radius: 5px;
     background-color: #4CAF50;
     color: white;
 }
 
-#buildingsView .upgradeBtn {
-    background-color: #f39c12;
+#mainView {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, minmax(10vh, 1fr));
+    gap: 7vh;
+    justify-items: center;
+    align-items: start;
+    width: 100vw;
+    flex-grow: 1;
+    margin: 0 auto;
+    overflow: hidden;
 }
 
-#minesView .mineBtn {
-    background-color: #3498db;
+#palace {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+#workerHouse {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#foodMine {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#woodMine {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+#barracks {
+    grid-column: 3;
+    grid-row: 2;
 }
 
 .building, .mine {
-    margin: 20px auto;
-    padding: 10px;
-    border-radius: 5px;
-    display: inline-block;
-    vertical-align: top;
-    width: 250px;
+    width: 8vw;
+    height: auto;
     position: relative;
     background: none;
     box-shadow: none;
 }
 
 .building img, .mine img {
-    width: 150px;
-    height: 150px;
+    width: 100%;
+    height: auto;
     object-fit: cover;
+    max-width: 8vw;
+    max-height: 8vh;
 }
 
-.info {
-    margin-top: 10px;
+.info, .extraInfo {
+    font-size: 2vh;
+}
+
+.extraInfo {
+    position: absolute;
+    top: calc(100% + 1vh);
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 0.5vh 1vw;
+    border-radius: 5px;
+    width: auto;
+}
+
+#woodMine .extraInfo {
+    top: auto; /* Скидає стандартний top */
+    bottom: calc(100% + 1vh); /* Позиціонує інформацію над будівлею для нижньої будівлі */
 }
 
 .tooltip {
-    margin-top: 10px;
-    font-size: 14px;
+    margin-top: 1vh;
+    font-size: 2vh;
     color: #fff;
 }
 
 .progressTimer {
-    margin-top: 5px;
-    font-size: 14px;
+    margin-top: 1vh;
+    font-size: 2vh;
     color: #fff;
 }
