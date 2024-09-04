@@ -6,7 +6,7 @@ body {
     margin: 0;
     padding: 0;
     text-align: center;
-    color: #fff; /* Змінюємо кольори тексту на білий за замовчуванням */
+    color: #fff;
 }
 
 #navbar {
@@ -21,7 +21,7 @@ button {
     border: none;
     border-radius: 5px;
     background-color: #4CAF50;
-    color: white; /* Колір тексту на кнопках білий */
+    color: white;
 }
 
 #buildingsView .upgradeBtn {
@@ -38,15 +38,16 @@ button {
     border-radius: 5px;
     display: inline-block;
     vertical-align: top;
-    width: 250px; /* Adjust width as needed */
+    width: 250px;
     position: relative;
-    background: none; /* Remove white background */
-    box-shadow: none; /* Remove box shadow */
+    background: none;
+    box-shadow: none;
 }
 
 .building img, .mine img {
-    width: 100px; /* Adjust size as needed */
-    height: auto;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
 }
 
 .info {
@@ -56,28 +57,11 @@ button {
 .tooltip {
     margin-top: 10px;
     font-size: 14px;
-    color: #fff; /* Колір тексту в підказках білий */
-}
-
-.progressContainer {
-    margin-top: 10px;
-    background-color: #ddd;
-    border-radius: 5px;
-    overflow: hidden;
-    height: auto;
-    width: 100%;
-}
-
-.progressBar {
-    height: 20px;
-    background-color: #4CAF50;
-    width: 0%;
-    transition: width 0.5s;
-    margin: 2px 0;
+    color: #fff;
 }
 
 .progressTimer {
     margin-top: 5px;
     font-size: 14px;
-    color: #fff; /* Колір таймера білий */
+    color: #fff;
 }

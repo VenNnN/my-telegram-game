@@ -10,6 +10,7 @@
     <div id="navbar">
         <button id="buildingsViewBtn">Buildings</button>
         <button id="minesViewBtn">Mines</button>
+        <button id="resetBtn">Reset</button>
     </div>
 
     <!-- Buildings View -->
@@ -20,8 +21,7 @@
                 <p>Level: <span id="palaceLevel">1</span></p>
                 <button id="upgradePalace" class="upgradeBtn">Upgrade</button>
                 <div class="tooltip">Upgrade cost: <span id="palaceCost">100 food, 100 wood</span></div>
-                <div id="palaceProgress" class="progressContainer">
-                    <div id="palaceProgressBar" class="progressBar"></div>
+                <div id="palaceProgress">
                     <div id="palaceProgressTimer" class="progressTimer"></div>
                 </div>
             </div>
@@ -33,8 +33,7 @@
                 <p>Level: <span id="workerHouseLevel">1</span></p>
                 <button id="upgradeWorkerHouse" class="upgradeBtn">Upgrade</button>
                 <div class="tooltip">Upgrade cost: <span id="workerHouseCost">50 food, 50 wood</span></div>
-                <div id="workerHouseProgress" class="progressContainer">
-                    <div id="workerHouseProgressBar" class="progressBar"></div>
+                <div id="workerHouseProgress">
                     <div id="workerHouseProgressTimer" class="progressTimer"></div>
                 </div>
             </div>
@@ -55,9 +54,8 @@
             <div class="info">
                 <p>Available Workers: <span id="foodMineWorkers">0</span></p>
                 <button id="mineFood" class="mineBtn">Send Worker</button>
-                <div class="tooltip">Mining time: 5s, Gain: 100 food</div>
-                <div id="foodMineProgressContainer" class="progressContainer">
-                    <!-- Progress bars and timers will be added here dynamically -->
+                <div class="tooltip">Mining time: 5s, Gain: 5 food</div>
+                <div id="foodMineProgressContainer">
                 </div>
             </div>
         </div>
@@ -67,9 +65,8 @@
             <div class="info">
                 <p>Available Workers: <span id="woodMineWorkers">0</span></p>
                 <button id="mineWood" class="mineBtn">Send Worker</button>
-                <div class="tooltip">Mining time: 5s, Gain: 100 wood</div>
-                <div id="woodMineProgressContainer" class="progressContainer">
-                    <!-- Progress bars and timers will be added here dynamically -->
+                <div class="tooltip">Mining time: 5s, Gain: 5 wood</div>
+                <div id="woodMineProgressContainer">
                 </div>
             </div>
         </div>
