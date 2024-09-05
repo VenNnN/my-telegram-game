@@ -228,6 +228,22 @@ loadConfig().then(config => {
         return `${seconds}s`;
     }
 
+    // Function to check and update the total worker count every second
+    function updateWorkerCount() {
+        const workersInMines = Object.keys(miningData).length; // Count workers currently mining
+        const totalWorkers = workerHouseLevel; // Total workers should be equal to the worker house level
+        availableWorkers = totalWorkers - workersInMines; // Calculate available workers
+
+        // Save the updated worker count to localStorage
+        saveState('availableWorkers', availableWorkers);
+
+        // Update the display
+        updateDisplay();
+    }
+
+    // Call the updateWorkerCount function every second
+    setInterval(updateWorkerCount, 1000);
+
     function updateDisplay() {
         document.getElementById('palaceLevel').textContent = palaceLevel;
         document.getElementById('workerHouseLevel').textContent = workerHouseLevel;
