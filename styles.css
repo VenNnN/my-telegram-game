@@ -10,7 +10,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     height: 100vh;
     overflow: hidden;
 }
@@ -20,51 +19,69 @@ body {
     justify-content: center;
     align-items: center;
     gap: 2vw;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #4CAF50; /* Змінено на зелений фон */
     padding: 1vh 2vw;
-    border-radius: 10px;
     font-size: 2vh;
-    margin: 1vh auto;
-    width: fit-content;
-    border: 1px solid white;
+    border-bottom: 1px solid white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 10vh; /* Встановлено однакову висоту з нижньою панеллю */
 }
 
 #navbar {
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 1vh 2vw;
-    border-radius: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #000;
+    padding: 0;
     font-size: 2vh;
-    margin: 1vh auto;
-    width: fit-content;
-    border: 1px solid white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 10vh; /* Встановлено однакову висоту з верхньою панеллю */
 }
 
-button {
-    padding: 1vh 2vw;
+#navbar button {
+    flex: 1;
+    margin: 0;
+    height: 100%;
+    border: none;
+    background-color: #4CAF50; /* Зелений фон для всіх кнопок */
+    color: white;
     font-size: 2vh;
     cursor: pointer;
-    margin: 1vh;
-    border: none;
-    border-radius: 5px;
-    background-color: #4CAF50;
-    color: white;
+    border-radius: 0;
+    text-align: center;
+}
+
+/* Спеціальний стиль для кнопки "Reset" */
+#navbar #resetBtn {
+    background-color: #f44336 !important; /* Червоний фон для кнопки "Reset" з використанням !important */
 }
 
 #mainView {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Create a 5-column grid */
-    grid-template-rows: repeat(5, 1fr); /* Create a 5-row grid */
-    gap: 3vh;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 3vh; /* Збільшено відстань між будівлями трохи */
     justify-items: center;
     align-items: center;
     width: 100vw;
-    height: 80vh; /* Set the height to control the grid size */
-    margin: 0 auto;
+    height: calc(100vh - 20vh);
+    margin-top: 10vh;
+    margin-bottom: 10vh;
 }
 
 .building, .mine {
-    width: 25vw; /* Increase size for images */
-    height: 25vw; /* Keep the images square */
+    width: 24vw; /* Збільшено розмір зображень ще більше */
+    height: 24vw;
     position: relative;
     background: none;
     box-shadow: none;
@@ -97,11 +114,6 @@ button {
     width: auto;
 }
 
-#woodMine .extraInfo {
-    top: auto; /* Resets top for bottom buildings */
-    bottom: calc(100% + 1vh); /* Positions above the building for bottom buildings */
-}
-
 .tooltip {
     margin-top: 1vh;
     font-size: 2vh;
@@ -117,25 +129,25 @@ button {
 /* Positioning for diagonal layout around the palace */
 #palace {
     grid-column: 3;
-    grid-row: 3; /* Center of the grid */
+    grid-row: 3;
 }
 
 #workerHouse {
     grid-column: 2;
-    grid-row: 2; /* Top-left diagonal from the palace */
+    grid-row: 2;
 }
 
 #foodMine {
     grid-column: 4;
-    grid-row: 2; /* Top-right diagonal from the palace */
+    grid-row: 2;
 }
 
 #woodMine {
     grid-column: 2;
-    grid-row: 4; /* Bottom-left diagonal from the palace */
+    grid-row: 4;
 }
 
 #barracks {
     grid-column: 4;
-    grid-row: 4; /* Bottom-right diagonal from the palace */
+    grid-row: 4;
 }
