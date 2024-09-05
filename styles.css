@@ -130,16 +130,19 @@ body {
 #palace {
     grid-column: 3;
     grid-row: 3;
+    transform: translateY(50%); /* Зсув вниз на 50% висоти елемента */
 }
+
 
 #workerHouse {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 3;
 }
 
 #foodMine {
     grid-column: 4;
-    grid-row: 2;
+    grid-row: 3;
+    transform: translateY(-20%); /* Зсув вниз на 50% висоти елемента */
 }
 
 #woodMine {
@@ -150,4 +153,17 @@ body {
 #barracks {
     grid-column: 4;
     grid-row: 4;
+    transform: translateY(-20%); /* Зсув вниз на 50% висоти елемента */
+}
+
+#barracks2 {
+    grid-column: 3;
+    grid-row: 2;
+    transform: translateY(50%); /* Зсув вниз на 50% висоти елемента */
+}
+
+#barracks3 {
+    grid-column: 3;
+    grid-row: 4;
+    transform: translateY(50%); /* Зсув вниз на 50% висоти елемента */
 }
