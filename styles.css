@@ -52,56 +52,33 @@ button {
 
 #mainView {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, minmax(10vh, 1fr));
-    gap: 7vh;
+    grid-template-columns: repeat(5, 1fr); /* Create a 5-column grid */
+    grid-template-rows: repeat(5, 1fr); /* Create a 5-row grid */
+    gap: 5vh;
     justify-items: center;
-    align-items: start;
+    align-items: center;
     width: 100vw;
-    flex-grow: 1;
+    height: 80vh; /* Set the height to control the grid size */
     margin: 0 auto;
-    overflow: hidden;
-}
-
-#palace {
-    grid-column: 2;
-    grid-row: 2;
-}
-
-#workerHouse {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-#foodMine {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-#woodMine {
-    grid-column: 2;
-    grid-row: 3;
-}
-
-#barracks {
-    grid-column: 3;
-    grid-row: 2;
 }
 
 .building, .mine {
-    width: 8vw;
-    height: auto;
+    width: 18vw; /* Increase size for images */
+    height: 18vw; /* Keep the images square */
     position: relative;
     background: none;
     box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .building img, .mine img {
     width: 100%;
     height: auto;
     object-fit: cover;
-    max-width: 8vw;
-    max-height: 8vh;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .info, .extraInfo {
@@ -121,8 +98,8 @@ button {
 }
 
 #woodMine .extraInfo {
-    top: auto; /* Скидає стандартний top */
-    bottom: calc(100% + 1vh); /* Позиціонує інформацію над будівлею для нижньої будівлі */
+    top: auto; /* Resets top for bottom buildings */
+    bottom: calc(100% + 1vh); /* Positions above the building for bottom buildings */
 }
 
 .tooltip {
@@ -135,4 +112,30 @@ button {
     margin-top: 1vh;
     font-size: 2vh;
     color: #fff;
+}
+
+/* Positioning for diagonal layout around the palace */
+#palace {
+    grid-column: 3;
+    grid-row: 3; /* Center of the grid */
+}
+
+#workerHouse {
+    grid-column: 2;
+    grid-row: 2; /* Top-left diagonal from the palace */
+}
+
+#foodMine {
+    grid-column: 4;
+    grid-row: 2; /* Top-right diagonal from the palace */
+}
+
+#woodMine {
+    grid-column: 2;
+    grid-row: 4; /* Bottom-left diagonal from the palace */
+}
+
+#barracks {
+    grid-column: 4;
+    grid-row: 4; /* Bottom-right diagonal from the palace */
 }
