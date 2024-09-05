@@ -54,7 +54,7 @@ button {
     display: grid;
     grid-template-columns: repeat(5, 1fr); /* Create a 5-column grid */
     grid-template-rows: repeat(5, 1fr); /* Create a 5-row grid */
-    gap: 5vh;
+    gap: 3vh;
     justify-items: center;
     align-items: center;
     width: 100vw;
@@ -63,8 +63,8 @@ button {
 }
 
 .building, .mine {
-    width: 18vw; /* Increase size for images */
-    height: 18vw; /* Keep the images square */
+    width: 25vw; /* Increase size for images */
+    height: 25vw; /* Keep the images square */
     position: relative;
     background: none;
     box-shadow: none;
