@@ -226,10 +226,27 @@ loadConfig().then(config => {
         }, 100);
     }
 
-    function formatTime(ms) {
-        const seconds = Math.ceil(ms / 1000);
-        return `${seconds}s`;
+function formatTime(ms) {
+    const totalSeconds = Math.ceil(ms / 1000); // Перетворюємо мілісекунди на секунди
+    const days = Math.floor(totalSeconds / 86400); // Обчислюємо дні
+    const hours = Math.floor((totalSeconds % 86400) / 3600); // Обчислюємо години
+    const minutes = Math.floor((totalSeconds % 3600) / 60); // Обчислюємо хвилини
+    const seconds = totalSeconds % 60; // Обчислюємо секунди
+
+    let formattedTime = '';
+    if (days > 0) {
+        formattedTime += `${days}d `;
     }
+    if (hours > 0 || days > 0) { // Додаємо години, якщо є дні або години більше нуля
+        formattedTime += `${hours}h `;
+    }
+    if (minutes > 0 || hours > 0 || days > 0) { // Додаємо хвилини, якщо є дні, години або хвилини більше нуля
+        formattedTime += `${minutes}m `;
+    }
+    formattedTime += `${seconds}s`; // Додаємо секунди в будь-якому випадку
+
+    return formattedTime;
+}
 
     // Function to check and update the total worker count every second
     function updateWorkerCount() {
