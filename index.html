@@ -26,6 +26,7 @@
         </div>
         <div id="workerHouseInfo" class="extraInfo" style="display: none;">
             <button id="closeWorkerHouseInfo" class="closeBtn">&times;</button>
+            <img src="images/workerHouse.png" alt="Worker House" class="infoImage">
             <div class="tooltip">Upgrade cost: <span id="workerHouseCost">50 food, 50 wood</span></div>
             <button id="upgradeWorkerHouse" class="upgradeBtn">Upgrade</button>
         </div>
@@ -40,30 +41,41 @@
         </div>
         <div id="palaceInfo" class="extraInfo" style="display: none;">
             <button id="closePalaceInfo" class="closeBtn">&times;</button>
-            <button id="upgradePalace" class="upgradeBtn">Upgrade</button>
+            <img src="images/palace.png" alt="Palace" class="infoImage"> <!-- Додаємо зображення будівлі -->
             <div class="tooltip">Upgrade cost: <span id="palaceCost">100 food, 100 wood</span></div>
+            <button id="upgradePalace" class="upgradeBtn">Upgrade</button>
         </div>
 
         <!-- Mines -->
         <div id="foodMine" class="mine">
             <span class="level" id="foodMineLevel">1</span>
             <img src="images/foodMine.png" alt="Food Mine" onclick="toggleInfo('foodMine')">
+            <div class="info">
+                <div id="foodMineProgress" class="progressTimer"></div> <!-- Новий таймер -->
+            </div>
         </div>
         <div id="foodMineInfo" class="extraInfo" style="display: none;">
             <button id="closeFoodMineInfo" class="closeBtn">&times;</button>
-            <button id="mineFood" class="mineBtn">Send Worker</button>
-            <div class="tooltip">Mining time: 5s, Gain: 5 food</div>
+            <img src="images/foodMine.png" alt="FoodMine" class="infoImage"> <!-- Додаємо зображення будівлі -->
+            <label for="workersFood">Workers:</label>
+            <input type="number" id="workersFood" min="1" value="1" style="width: 50px;">
+            <button id="mineFood" class="mineBtn">Send Workers</button>
             <div id="foodMineProgressContainer"></div>
         </div>
 
         <div id="woodMine" class="mine">
             <span class="level" id="woodMineLevel">1</span>
             <img src="images/woodMine.png" alt="Wood Mine" onclick="toggleInfo('woodMine')">
+            <div class="info">
+                <div id="woodMineProgress" class="progressTimer"></div> <!-- Новий таймер -->
+            </div>
         </div>
         <div id="woodMineInfo" class="extraInfo" style="display: none;">
             <button id="closeWoodMineInfo" class="closeBtn">&times;</button>
-            <button id="mineWood" class="mineBtn">Send Worker</button>
-            <div class="tooltip">Mining time: 5s, Gain: 5 wood</div>
+            <img src="images/woodMine.png" alt="WoodMine" class="infoImage"> <!-- Додаємо зображення будівлі -->
+            <label for="workersWood">Workers:</label>
+            <input type="number" id="workersWood" min="1" value="1" style="width: 50px;">
+            <button id="mineWood" class="mineBtn">Send Workers</button>
             <div id="woodMineProgressContainer"></div>
         </div>
 
@@ -78,8 +90,9 @@
         </div>
         <div id="barracksInfo" class="extraInfo" style="display: none;">
             <button id="closeBarracksInfo" class="closeBtn">&times;</button>
-            <button id="upgradeBarracks" class="upgradeBtn">Upgrade</button>
+            <img src="images/barracks.png" alt="Barracks" class="infoImage"> <!-- Додаємо зображення будівлі -->
             <div class="tooltip">Upgrade cost: <span id="barracksCost">200 food, 200 wood</span></div>
+            <button id="upgradeBarracks" class="upgradeBtn">Upgrade</button>
         </div>
 
         <!-- Barracks 2 -->

@@ -77,24 +77,26 @@ loadConfig().then(config => {
     });
 
     document.getElementById('mineFood').addEventListener('click', () => {
-        if (availableWorkers > 0) {
-            availableWorkers--;
+        const workers = parseInt(document.getElementById('workersFood').value); // Кількість робітників для їжі
+        if (availableWorkers >= workers) {
+            availableWorkers -= workers;
             saveState('availableWorkers', availableWorkers); // Save state after reducing workers
-            startMining('food', foodMineProgressContainer);
+            startMining('food', foodMineProgressContainer, workers); // Передаємо кількість робітників
             updateDisplay();
         } else {
-            alert('No available workers.');
+            alert('Not enough workers.');
         }
     });
 
     document.getElementById('mineWood').addEventListener('click', () => {
-        if (availableWorkers > 0) {
-            availableWorkers--;
+        const workers = parseInt(document.getElementById('workersWood').value); // Кількість робітників для дерева
+        if (availableWorkers >= workers) {
+            availableWorkers -= workers;
             saveState('availableWorkers', availableWorkers); // Save state after reducing workers
-            startMining('wood', woodMineProgressContainer);
+            startMining('wood', woodMineProgressContainer, workers); // Передаємо кількість робітників
             updateDisplay();
         } else {
-            alert('No available workers.');
+            alert('Not enough workers.');
         }
     });
 
@@ -162,26 +164,27 @@ loadConfig().then(config => {
         }, 100);
     }
 
-    function startMining(resource, container) {
+    function startMining(resource, container, workers) {
         const timer = document.createElement('span');
         timer.className = 'progressTimer';
         const timerId = Date.now(); // Unique identifier for each timer
         timer.id = `timer-${timerId}`;
         container.appendChild(timer);
 
-        const time = miningTime;
+        const time = miningTime * workers; // Загальний час добування пропорційний кількості робітників
         const endTime = Date.now() + time;
-        saveMiningData(resource, endTime, timer.id);
+        saveMiningData(resource, endTime, timer.id, workers); // Зберігаємо дані про видобуток разом з кількістю робітників
 
         // Save available workers in localStorage after assigning a worker
         saveState('availableWorkers', availableWorkers);
-        updateMiningTimer(timer, endTime);
+        updateMiningTimer(timer, endTime, resource, workers);
     }
 
-    function saveMiningData(resource, endTime, timerId) {
+    function saveMiningData(resource, endTime, timerId, workers) {
         const data = {
             endTime: endTime,
-            resource: resource
+            resource: resource,
+            workers: workers
         };
         miningData[timerId] = data;
         localStorage.setItem('miningData', JSON.stringify(miningData));
@@ -195,24 +198,27 @@ loadConfig().then(config => {
             timer.className = 'progressTimer';
             timer.id = id;
             container.appendChild(timer);
-            updateMiningTimer(timer, data.endTime);
+
+            const buildingTimerElement = document.getElementById(data.resource + 'MineProgress');
+            updateMiningTimer(timer, data.endTime, data.resource, data.workers);
         }
     }
 
-    function updateMiningTimer(timer, endTime) {
+    function updateMiningTimer(timer, endTime, resource, workers) {
+        const buildingTimerElement = document.getElementById(resource + 'MineProgress'); // Таймер на будівлі
         const interval = setInterval(() => {
             const remainingTime = endTime - Date.now();
             if (remainingTime <= 0) {
                 clearInterval(interval);
-                const resource = miningData[timer.id].resource;
-                if (resource === 'food') {
-                    food += resourceGain;
-                } else if (resource === 'wood') {
-                    wood += resourceGain;
+                const resourceType = miningData[timer.id].resource;
+                if (resourceType === 'food') {
+                    food += resourceGain * workers;
+                } else if (resourceType === 'wood') {
+                    wood += resourceGain * workers;
                 }
-                availableWorkers++;
+                availableWorkers += workers; // Повертаємо робітників після завершення видобутку
 
-                // Save resources and available workers in localStorage
+                // Зберігаємо ресурси та доступних робітників у localStorage
                 saveState('food', food);
                 saveState('wood', wood);
                 saveState('availableWorkers', availableWorkers);
@@ -220,44 +226,47 @@ loadConfig().then(config => {
                 delete miningData[timer.id];
                 localStorage.setItem('miningData', JSON.stringify(miningData));
                 timer.remove();
+                buildingTimerElement.textContent = ''; // Очищення таймера на будівлі
             } else {
-                timer.textContent = `${formatTime(remainingTime)}`;
+                const formattedTime = formatTime(remainingTime);
+                timer.textContent = formattedTime;
+                buildingTimerElement.textContent = formattedTime; // Оновлення таймера на будівлі
             }
         }, 100);
     }
 
-function formatTime(ms) {
-    const totalSeconds = Math.ceil(ms / 1000); // Перетворюємо мілісекунди на секунди
-    const days = Math.floor(totalSeconds / 86400); // Обчислюємо дні
-    const hours = Math.floor((totalSeconds % 86400) / 3600); // Обчислюємо години
-    const minutes = Math.floor((totalSeconds % 3600) / 60); // Обчислюємо хвилини
-    const seconds = totalSeconds % 60; // Обчислюємо секунди
+    function formatTime(ms) {
+        const totalSeconds = Math.ceil(ms / 1000); // Перетворюємо мілісекунди на секунди
+        const days = Math.floor(totalSeconds / 86400); // Обчислюємо дні
+        const hours = Math.floor((totalSeconds % 86400) / 3600); // Обчислюємо години
+        const minutes = Math.floor((totalSeconds % 3600) / 60); // Обчислюємо хвилини
+        const seconds = totalSeconds % 60; // Обчислюємо секунди
 
-    let formattedTime = '';
-    if (days > 0) {
-        formattedTime += `${days}d `;
-    }
-    if (hours > 0 || days > 0) { // Додаємо години, якщо є дні або години більше нуля
-        formattedTime += `${hours}h `;
-    }
-    if (minutes > 0 || hours > 0 || days > 0) { // Додаємо хвилини, якщо є дні, години або хвилини більше нуля
-        formattedTime += `${minutes}m `;
-    }
-    formattedTime += `${seconds}s`; // Додаємо секунди в будь-якому випадку
+        let formattedTime = '';
+        if (days > 0) {
+            formattedTime += `${days}d `;
+        }
+        if (hours > 0 || days > 0) { // Додаємо години, якщо є дні або години більше нуля
+            formattedTime += `${hours}h `;
+        }
+        if (minutes > 0 || hours > 0 || days > 0) { // Додаємо хвилини, якщо є дні, години або хвилини більше нуля
+            formattedTime += `${minutes}m `;
+        }
+        formattedTime += `${seconds}s`; // Додаємо секунди в будь-якому випадку
 
-    return formattedTime;
-}
+        return formattedTime;
+    }
 
-    // Function to check and update the total worker count every second
     function updateWorkerCount() {
-        const workersInMines = Object.keys(miningData).length; // Count workers currently mining
-        const totalWorkers = workerHouseLevel; // Total workers should be equal to the worker house level
-        availableWorkers = totalWorkers - workersInMines; // Calculate available workers
+        // Рахуємо кількість робітників, які зараз зайняті на видобутку
+        const workersInMines = Object.values(miningData).reduce((total, data) => total + data.workers, 0);
+        const totalWorkers = workerHouseLevel; // Загальна кількість робітників відповідає рівню будинку для робітників
+        availableWorkers = totalWorkers - workersInMines; // Обчислюємо кількість доступних робітників
 
-        // Save the updated worker count to localStorage
+        // Зберігаємо оновлену кількість робітників у localStorage
         saveState('availableWorkers', availableWorkers);
 
-        // Update the display
+        // Оновлюємо відображення
         updateDisplay();
     }
 
