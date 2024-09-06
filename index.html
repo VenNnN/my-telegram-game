@@ -56,9 +56,10 @@
         </div>
         <div id="foodMineInfo" class="extraInfo" style="display: none;">
             <button id="closeFoodMineInfo" class="closeBtn">&times;</button>
-            <img src="images/foodMine.png" alt="FoodMine" class="infoImage"> <!-- Додаємо зображення будівлі -->
+            <img src="images/foodMine.png" alt="FoodMine" class="infoImage">
             <label for="workersFood">Workers:</label>
-            <input type="number" id="workersFood" min="1" value="1" style="width: 50px;">
+            <input type="range" id="workersFood" min="0" max="0" value="0" style="width: 70%;"> <!-- Мінімальне значення змінено на 0 -->
+            <span id="workersFoodValue">0</span> <!-- Відображення вибраної кількості -->
             <button id="mineFood" class="mineBtn">Send Workers</button>
             <div id="foodMineProgressContainer"></div>
         </div>
@@ -72,9 +73,10 @@
         </div>
         <div id="woodMineInfo" class="extraInfo" style="display: none;">
             <button id="closeWoodMineInfo" class="closeBtn">&times;</button>
-            <img src="images/woodMine.png" alt="WoodMine" class="infoImage"> <!-- Додаємо зображення будівлі -->
+            <img src="images/woodMine.png" alt="WoodMine" class="infoImage">
             <label for="workersWood">Workers:</label>
-            <input type="number" id="workersWood" min="1" value="1" style="width: 50px;">
+            <input type="range" id="workersWood" min="0" max="0" value="0" style="width: 70%;"> <!-- Мінімальне значення змінено на 0 -->
+            <span id="workersWoodValue">0</span> <!-- Відображення вибраної кількості -->
             <button id="mineWood" class="mineBtn">Send Workers</button>
             <div id="woodMineProgressContainer"></div>
         </div>

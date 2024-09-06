@@ -76,28 +76,31 @@ loadConfig().then(config => {
         }
     });
 
+    let isMiningFood = false;
+    let isMiningWood = false;
+
     document.getElementById('mineFood').addEventListener('click', () => {
-        const workers = parseInt(document.getElementById('workersFood').value); // Кількість робітників для їжі
-        if (availableWorkers >= workers) {
+        const workers = parseInt(document.getElementById('workersFood').value);
+        if (workers > 0 && workers <= availableWorkers && !isMiningFood) { // Перевірка статусу видобутку
             availableWorkers -= workers;
-            saveState('availableWorkers', availableWorkers); // Save state after reducing workers
-            startMining('food', foodMineProgressContainer, workers); // Передаємо кількість робітників
+            saveState('availableWorkers', availableWorkers);
+            isMiningFood = true; // Позначити, що видобуток їжі розпочався
+            startMining('food', foodMineProgressContainer, workers);
             updateDisplay();
-        } else {
-            alert('Not enough workers.');
         }
+        // Нічого не робимо, якщо кількість робітників некоректна або вже йде видобуток
     });
 
     document.getElementById('mineWood').addEventListener('click', () => {
-        const workers = parseInt(document.getElementById('workersWood').value); // Кількість робітників для дерева
-        if (availableWorkers >= workers) {
+        const workers = parseInt(document.getElementById('workersWood').value);
+        if (workers > 0 && workers <= availableWorkers && !isMiningWood) { // Перевірка статусу видобутку
             availableWorkers -= workers;
-            saveState('availableWorkers', availableWorkers); // Save state after reducing workers
-            startMining('wood', woodMineProgressContainer, workers); // Передаємо кількість робітників
+            saveState('availableWorkers', availableWorkers);
+            isMiningWood = true; // Позначити, що видобуток деревини розпочався
+            startMining('wood', woodMineProgressContainer, workers);
             updateDisplay();
-        } else {
-            alert('Not enough workers.');
         }
+        // Нічого не робимо, якщо кількість робітників некоректна або вже йде видобуток
     });
 
     document.getElementById('resetBtn').addEventListener('click', function() {
@@ -106,6 +109,26 @@ loadConfig().then(config => {
             initializeGame();
             updateDisplay();
         }
+    });
+
+        // Функція для оновлення значення слайдера та доступних робітників
+    function updateSliderMax() {
+        const availableWorkers = loadState('availableWorkers', 1); // Загальна кількість доступних робітників
+        document.getElementById('workersFood').max = availableWorkers;
+        document.getElementById('workersWood').max = availableWorkers;
+        document.getElementById('workersFood').value = Math.min(availableWorkers, document.getElementById('workersFood').value || 0);
+        document.getElementById('workersWood').value = Math.min(availableWorkers, document.getElementById('workersWood').value || 0);
+        document.getElementById('workersFoodValue').textContent = document.getElementById('workersFood').value;
+        document.getElementById('workersWoodValue').textContent = document.getElementById('workersWood').value;
+    }
+
+    // Встановлення слухачів подій для слайдерів
+    document.getElementById('workersFood').addEventListener('input', function () {
+        document.getElementById('workersFoodValue').textContent = this.value;
+    });
+
+    document.getElementById('workersWood').addEventListener('input', function () {
+        document.getElementById('workersWoodValue').textContent = this.value;
     });
 
     function initializeGame() {
@@ -213,8 +236,10 @@ loadConfig().then(config => {
                 const resourceType = miningData[timer.id].resource;
                 if (resourceType === 'food') {
                     food += resourceGain * workers;
+                    isMiningFood = false; // Скидаємо статус видобутку їжі після завершення
                 } else if (resourceType === 'wood') {
                     wood += resourceGain * workers;
+                    isMiningWood = false; // Скидаємо статус видобутку деревини після завершення
                 }
                 availableWorkers += workers; // Повертаємо робітників після завершення видобутку
 
@@ -287,6 +312,13 @@ loadConfig().then(config => {
         saveState('availableWorkers', availableWorkers);
         saveState('food', food);
         saveState('wood', wood);
+
+        // Оновлення максимального значення слайдера
+        updateSliderMax();
+
+        // Блокування або розблокування кнопок видобутку
+        document.getElementById('mineFood').disabled = isMiningFood;
+        document.getElementById('mineWood').disabled = isMiningWood;
     }
 
     function loadState(key, defaultValue) {

@@ -188,6 +188,37 @@ body {
     pointer-events: none;
 }
 
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 70%;
+    background: #ddd;
+    height: 5px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.mineBtn:disabled {
+    background-color: #a9a9a9;
+    cursor: not-allowed;
+}
+
 /* builds */
 :root {
     --span-count: 2;
