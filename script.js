@@ -22,8 +22,8 @@ loadConfig().then(config => {
     let palaceLevel = loadState('palaceLevel', 1);
     let workerHouseLevel = loadState('workerHouseLevel', 1);
     let availableWorkers = loadState('availableWorkers', 1);
-    let food = loadState('food', 0);
-    let wood = loadState('wood', 0);
+    let food = loadState('food', 100);
+    let wood = loadState('wood', 100);
     let miningData = JSON.parse(localStorage.getItem('miningData')) || {};
     let upgradeData = JSON.parse(localStorage.getItem('upgradeData')) || {};
 
@@ -49,12 +49,12 @@ loadConfig().then(config => {
             isUpgradingPalace = true;
             startUpgrade('palace', palaceLevel, palaceProgressTimer, () => {
                 isUpgradingPalace = false;
+                palaceLevel++; // Збільшення рівня після завершення прокачки
+                saveState('palaceLevel', palaceLevel);
+                updateDisplay();
             });
-            palaceLevel++;
-            saveState('palaceLevel', palaceLevel);
-            updateDisplay();
+            updateDisplay(); // Оновлення відображення після запуску апгрейда
         } else {
-            alert('Not enough resources, maximum level reached, or an upgrade is already in progress.');
         }
     });
 
@@ -65,14 +65,14 @@ loadConfig().then(config => {
             isUpgradingWorkerHouse = true;
             startUpgrade('workerHouse', workerHouseLevel, workerHouseProgressTimer, () => {
                 isUpgradingWorkerHouse = false;
+                workerHouseLevel++; // Збільшення рівня після завершення прокачки
+                availableWorkers = workerHouseLevel; // Оновлення доступних робітників після завершення апгрейда
+                saveState('workerHouseLevel', workerHouseLevel);
+                saveState('availableWorkers', availableWorkers);
+                updateDisplay();
             });
-            workerHouseLevel++;
-            availableWorkers = workerHouseLevel; // Update available workers
-            saveState('workerHouseLevel', workerHouseLevel);
-            saveState('availableWorkers', availableWorkers);
-            updateDisplay();
+            updateDisplay(); // Оновлення відображення після запуску апгрейда
         } else {
-            alert('Not enough resources, maximum level reached, or an upgrade is already in progress.');
         }
     });
 
@@ -104,11 +104,9 @@ loadConfig().then(config => {
     });
 
     document.getElementById('resetBtn').addEventListener('click', function() {
-        if (confirm("Are you sure you want to reset all progress?")) {
-            localStorage.clear();
-            initializeGame();
-            updateDisplay();
-        }
+        localStorage.clear();
+        initializeGame();
+        updateDisplay();
     });
 
         // Функція для оновлення значення слайдера та доступних робітників
@@ -135,8 +133,8 @@ loadConfig().then(config => {
         palaceLevel = 1;
         workerHouseLevel = 1;
         availableWorkers = 1;
-        food = 0;
-        wood = 0;
+        food = 100;
+        wood = 100;
 
         saveState('palaceLevel', palaceLevel);
         saveState('workerHouseLevel', workerHouseLevel);
@@ -149,9 +147,19 @@ loadConfig().then(config => {
 
     function startUpgrade(building, level, timerElement, onComplete) {
         const time = upgradeTimes[level - 1];
+
+        // Перевірка, чи time є числом і більше нуля
+        if (isNaN(time) || time <= 0) {
+            alert('Неправильний час оновлення для цього рівня.');
+            return;
+        }
+
         const endTime = Date.now() + time;
         saveUpgradeData(building, endTime);
-        updateUpgradeTimer(timerElement, endTime, onComplete);
+
+        // Елемент для таймера в додатковій інформації
+        const infoTimerElement = document.getElementById(building + 'InfoProgress');
+        updateUpgradeTimer(timerElement, infoTimerElement, endTime, onComplete);
     }
 
     function saveUpgradeData(building, endTime) {
@@ -166,23 +174,37 @@ loadConfig().then(config => {
     function restoreUpgradeData() {
         for (const building in upgradeData) {
             const data = upgradeData[building];
-            const timerElement = building === 'palace' ? palaceProgressTimer : workerHouseProgressTimer;
-            updateUpgradeTimer(timerElement, data.endTime, () => {});
+            if (data && data.endTime) { // Перевірка, чи існує data і endTime
+                const timerElement = building === 'palace' ? palaceProgressTimer : workerHouseProgressTimer;
+                const infoTimerElement = document.getElementById(building + 'InfoProgress');
+                updateUpgradeTimer(timerElement, infoTimerElement, data.endTime, () => {});
+            }
         }
     }
 
-    function updateUpgradeTimer(timerElement, endTime, onComplete) {
+    function updateUpgradeTimer(timerElement, infoTimerElement, endTime, onComplete) {
+        // Перевірка, чи endTime є числом
+        if (isNaN(endTime) || endTime <= Date.now()) {
+            timerElement.textContent = ''; // Очищення тексту таймера
+            if (infoTimerElement) infoTimerElement.textContent = ''; // Очищення тексту таймера у додатковій інформації
+            if (onComplete) onComplete();
+            return; // Вихід, якщо немає коректного endTime
+        }
+
         const interval = setInterval(() => {
             const remainingTime = endTime - Date.now();
             if (remainingTime <= 0) {
                 clearInterval(interval);
-                timerElement.textContent = ''; // Clear the timer text
+                timerElement.textContent = ''; // Очищення таймера на карті
+                if (infoTimerElement) infoTimerElement.textContent = ''; // Очищення таймера в додатковій інформації
                 updateDisplay();
                 delete upgradeData[timerElement.id];
                 localStorage.setItem('upgradeData', JSON.stringify(upgradeData));
                 if (onComplete) onComplete();
             } else {
-                timerElement.textContent = `${formatTime(remainingTime)}`; // Update timer text
+                const formattedTime = formatTime(remainingTime);
+                timerElement.textContent = formattedTime; // Оновлення таймера на карті
+                if (infoTimerElement) infoTimerElement.textContent = formattedTime; // Оновлення таймера в додатковій інформації
             }
         }, 100);
     }
