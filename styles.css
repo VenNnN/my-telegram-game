@@ -187,108 +187,54 @@ body {
     transform: translate(-1%, 0%);
 }
 #foodMine {
-    grid-column: 2 / span var(--span-count);
-    grid-row: 8 / span var(--span-count);
-    transform: translate(23%, 0%);
+    grid-column: 3 / span var(--span-count);
+    grid-row: 11 / span var(--span-count);
+    transform: translate(37%, 29%);
 }
 #barracks {
-    grid-column: 2 / span var(--span-count);
-    grid-row: 10 / span var(--span-count);
-    transform: translate(23%, 20%);
+    grid-column: 3 / span var(--span-count);
+    grid-row: 14 / span var(--span-count);
+    transform: translate(37%, 0%);
 }
-/*
+/**/
 #barracks2 {
-    grid-column: 2 / span var(--span-count);
-    grid-row: 12 / span var(--span-count);
-    transform: translate(23%, 40%);
-}
-#barracks3 {
     grid-column: 3 / span var(--span-count);
     grid-row: 6 / span var(--span-count);
     transform: translate(36%, 38%);
 }
-#barracks4 {
+#barracks3 {
     grid-column: 3 / span var(--span-count);
     grid-row: 9 / span var(--span-count);
     transform: translate(36%, 9%);
 }
-#barracks5 {
-    grid-column: 3 / span var(--span-count);
-    grid-row: 11 / span var(--span-count);
-    transform: translate(36%, 29%);
-}
-/*
-#barracks6 {
-    grid-column: 3 / span var(--span-count);
-    grid-row: 14 / span var(--span-count);
-    transform: translate(36%, 0%);
-}
-#barracks7 {
-    grid-column: 5 / span var(--span-count);
-    grid-row: 5 / span var(--span-count);
-    transform: translate(0%, 28%);
-}
-#barracks8 {
-    grid-column: 5 / span var(--span-count);
-    grid-row: 8 / span var(--span-count);
-    transform: translate(0%, 0%);
-}
-/*
-#barracks9 {
-    grid-column: 5 / span var(--span-count);
-    grid-row: 12 / span var(--span-count);
-    transform: translate(0%, 40%);
-}
-#barracks10 {
-    grid-column: 5 / span var(--span-count);
-    grid-row: 15 / span var(--span-count);
-    transform: translate(0%, 10%);
-}
-#barracks11 {
+#barracks4 {
     grid-column: 6 / span var(--span-count);
     grid-row: 6 / span var(--span-count);
     transform: translate(13%, 38%);
 }
-#barracks12 {
+#barracks5 {
     grid-column: 6 / span var(--span-count);
     grid-row: 9 / span var(--span-count);
     transform: translate(13%, 9%);
 }
-/*
-#barracks13 {
+/**/
+#barracks6 {
     grid-column: 6 / span var(--span-count);
     grid-row: 11 / span var(--span-count);
     transform: translate(13%, 29%);
 }
-#barracks14 {
+#barracks7 {
     grid-column: 6 / span var(--span-count);
     grid-row: 14 / span var(--span-count);
     transform: translate(13%, 0%);
 }
-#barracks15 {
-    grid-column: 7 / span var(--span-count);
-    grid-row: 8 / span var(--span-count);
-    transform: translate(27%, 0%);
-}
-/*
-#barracks16 {
-    grid-column: 7 / span var(--span-count);
-    grid-row: 10 / span var(--span-count);
-    transform: translate(27%, 20%);
-}
-#barracks17 {
-    grid-column: 7 / span var(--span-count);
-    grid-row: 12 / span var(--span-count);
-    transform: translate(27%, 40%);
-}
-#barracks18 {
+#barracks8 {
     grid-column: 8 / span var(--span-count);
     grid-row: 9 / span var(--span-count);
     transform: translate(40%, 9%);
 }
-#barracks19 {
+#barracks9 {
     grid-column: 8 / span var(--span-count);
     grid-row: 11 / span var(--span-count);
     transform: translate(40%, 29%);
 }
-*/
