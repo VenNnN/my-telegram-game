@@ -4,14 +4,17 @@ async function loadConfig() {
     return await response.json();
 }
 
-// Function to toggle visibility of additional information
 function toggleInfo(buildingId) {
     const infoElement = document.getElementById(buildingId + 'Info');
-    if (infoElement.style.display === 'none') {
-        infoElement.style.display = 'block';
-    } else {
+    infoElement.style.display = 'block';
+    const closeButton = document.getElementById('close' + capitalizeFirstLetter(buildingId) + 'Info');
+    closeButton.onclick = function () {
         infoElement.style.display = 'none';
-    }
+    };
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 // Load configuration and initialize the game
@@ -154,7 +157,7 @@ loadConfig().then(config => {
                 localStorage.setItem('upgradeData', JSON.stringify(upgradeData));
                 if (onComplete) onComplete();
             } else {
-                timerElement.textContent = `Time left: ${formatTime(remainingTime)}`; // Update timer text
+                timerElement.textContent = `${formatTime(remainingTime)}`; // Update timer text
             }
         }, 100);
     }
@@ -218,7 +221,7 @@ loadConfig().then(config => {
                 localStorage.setItem('miningData', JSON.stringify(miningData));
                 timer.remove();
             } else {
-                timer.textContent = `Time left: ${formatTime(remainingTime)}`;
+                timer.textContent = `${formatTime(remainingTime)}`;
             }
         }, 100);
     }
