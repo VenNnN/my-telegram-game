@@ -28,7 +28,7 @@
             <button id="closeWorkerHouseInfo" class="closeBtn">&times;</button>
             <img src="images/workerHouse.png" alt="Worker House" class="infoImage">
             <div class="tooltip">Upgrade cost: <span id="workerHouseCost">50 food, 50 wood</span></div>
-            <button id="upgradeWorkerHouse" class="upgradeBtn">Upgrade</button>
+            <button id="upgradeWorkerHouse" class="upgradeBtn" disabled>Upgrade</button>
         </div>
 
         <!-- Palace -->
@@ -43,7 +43,7 @@
             <button id="closePalaceInfo" class="closeBtn">&times;</button>
             <img src="images/palace.png" alt="Palace" class="infoImage"> <!-- Додаємо зображення будівлі -->
             <div class="tooltip">Upgrade cost: <span id="palaceCost">100 food, 100 wood</span></div>
-            <button id="upgradePalace" class="upgradeBtn">Upgrade</button>
+            <button id="upgradePalace" class="upgradeBtn" disabled>Upgrade</button>
         </div>
 
         <!-- Mines -->
@@ -57,10 +57,12 @@
         <div id="foodMineInfo" class="extraInfo" style="display: none;">
             <button id="closeFoodMineInfo" class="closeBtn">&times;</button>
             <img src="images/foodMine.png" alt="FoodMine" class="infoImage">
-            <input type="range" id="workersFood" min="0" max="0" value="0" style="width: 70%;"> <!-- Мінімальне значення змінено на 0 -->
-            <span id="workersFoodValue">0</span> <!-- Відображення вибраної кількості -->
+            <input type="range" id="workersFood" min="0" max="0" value="0" style="width: 70%;">
+            <span id="workersFoodValue">0</span>
             <button id="mineFood" class="mineBtn">Send Workers</button>
             <div id="foodMineProgressContainer"></div>
+            <button id="upgradeFoodMine" class="upgradeBtn" disabled>Upgrade Food Mine</button>
+            <div class="tooltip">Upgrade cost: <span id="foodMineCost">20 food, 20 wood</span></div>
         </div>
 
         <div id="woodMine" class="mine">
@@ -73,10 +75,13 @@
         <div id="woodMineInfo" class="extraInfo" style="display: none;">
             <button id="closeWoodMineInfo" class="closeBtn">&times;</button>
             <img src="images/woodMine.png" alt="WoodMine" class="infoImage">
-            <input type="range" id="workersWood" min="0" max="0" value="0" style="width: 70%;"> <!-- Мінімальне значення змінено на 0 -->
-            <span id="workersWoodValue">0</span> <!-- Відображення вибраної кількості -->
+            <input type="range" id="workersWood" min="0" max="0" value="0" style="width: 70%;">
+            <span id="workersWoodValue">0</span>
             <button id="mineWood" class="mineBtn">Send Workers</button>
             <div id="woodMineProgressContainer"></div>
+            <!-- Нова кнопка прокачки шахти для дерева -->
+            <button id="upgradeWoodMine" class="upgradeBtn" disabled>Upgrade Wood Mine</button>
+            <div class="tooltip">Upgrade cost: <span id="woodMineCost">30 food, 30 wood</span></div>
         </div>
 
         <!-- Barracks -->

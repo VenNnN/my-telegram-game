@@ -27,6 +27,12 @@ loadConfig().then(config => {
     let miningData = JSON.parse(localStorage.getItem('miningData')) || {};
     let upgradeData = JSON.parse(localStorage.getItem('upgradeData')) || {};
 
+    let foodMineLevel = loadState('foodMineLevel', 1);
+    let woodMineLevel = loadState('woodMineLevel', 1);
+
+    const foodMineCosts = config.foodMineCosts;
+    const woodMineCosts = config.woodMineCosts;
+
     const maxLevel = config.maxLevel;
     const palaceCosts = config.palaceCosts;
     const workerHouseCosts = config.workerHouseCosts;
@@ -36,6 +42,11 @@ loadConfig().then(config => {
 
     let isUpgradingPalace = false;
     let isUpgradingWorkerHouse = false;
+    let isMiningFood = false;
+    let isMiningWood = false;
+    let isUpgradingFoodMine = false; // Відстеження стану прокачки шахти для їжі
+    let isUpgradingWoodMine = false; // Відстеження стану прокачки шахти для дерева
+    let isAnyUpgradeInProgress = false; // Відстеження стану оновлення будь-якої будівлі
 
     const palaceProgressTimer = document.getElementById('palaceProgress'); // Corrected ID
     const workerHouseProgressTimer = document.getElementById('workerHouseProgress'); // Corrected ID
@@ -43,12 +54,14 @@ loadConfig().then(config => {
     const woodMineProgressContainer = document.getElementById('woodMineProgressContainer');
 
     document.getElementById('upgradePalace').addEventListener('click', () => {
-        if (!isUpgradingPalace && palaceLevel < maxLevel && food >= palaceCosts[palaceLevel - 1] && wood >= palaceCosts[palaceLevel - 1]) {
+        if (!isAnyUpgradeInProgress && palaceLevel < maxLevel && food >= palaceCosts[palaceLevel - 1] && wood >= palaceCosts[palaceLevel - 1]) {
             food -= palaceCosts[palaceLevel - 1];
             wood -= palaceCosts[palaceLevel - 1];
             isUpgradingPalace = true;
+            isAnyUpgradeInProgress = true; // Прокачка почалась
             startUpgrade('palace', palaceLevel, palaceProgressTimer, () => {
                 isUpgradingPalace = false;
+                isAnyUpgradeInProgress = false; // Прокачка завершена
                 palaceLevel++; // Збільшення рівня після завершення прокачки
                 saveState('palaceLevel', palaceLevel);
                 updateDisplay();
@@ -59,12 +72,14 @@ loadConfig().then(config => {
     });
 
     document.getElementById('upgradeWorkerHouse').addEventListener('click', () => {
-        if (!isUpgradingWorkerHouse && workerHouseLevel < maxLevel && food >= workerHouseCosts[workerHouseLevel - 1] && wood >= workerHouseCosts[workerHouseLevel - 1]) {
+        if (!isAnyUpgradeInProgress && workerHouseLevel < maxLevel && workerHouseLevel < palaceLevel && food >= workerHouseCosts[workerHouseLevel - 1] && wood >= workerHouseCosts[workerHouseLevel - 1]) {
             food -= workerHouseCosts[workerHouseLevel - 1];
             wood -= workerHouseCosts[workerHouseLevel - 1];
             isUpgradingWorkerHouse = true;
+            isAnyUpgradeInProgress = true; // Прокачка почалась
             startUpgrade('workerHouse', workerHouseLevel, workerHouseProgressTimer, () => {
                 isUpgradingWorkerHouse = false;
+                isAnyUpgradeInProgress = false; // Прокачка завершена
                 workerHouseLevel++; // Збільшення рівня після завершення прокачки
                 availableWorkers = workerHouseLevel; // Оновлення доступних робітників після завершення апгрейда
                 saveState('workerHouseLevel', workerHouseLevel);
@@ -76,8 +91,39 @@ loadConfig().then(config => {
         }
     });
 
-    let isMiningFood = false;
-    let isMiningWood = false;
+    document.getElementById('upgradeFoodMine').addEventListener('click', () => {
+        if (!isAnyUpgradeInProgress && !isMiningFood && foodMineLevel < maxLevel && foodMineLevel < palaceLevel && food >= foodMineCosts[foodMineLevel - 1] && wood >= foodMineCosts[foodMineLevel - 1]) {
+            food -= foodMineCosts[foodMineLevel - 1];
+            wood -= foodMineCosts[foodMineLevel - 1];
+            isUpgradingFoodMine = true; // Встановлюємо стан прокачки на true
+            isAnyUpgradeInProgress = true; // Прокачка почалась
+            startUpgrade('foodMine', foodMineLevel, document.getElementById('foodMineProgress'), () => {
+                isUpgradingFoodMine = false; // Змінюємо стан після завершення прокачки
+                isAnyUpgradeInProgress = false; // Прокачка завершена
+                foodMineLevel++;
+                saveState('foodMineLevel', foodMineLevel);
+                updateDisplay();
+            });
+            updateDisplay();
+        }
+    });
+
+    document.getElementById('upgradeWoodMine').addEventListener('click', () => {
+        if (!isAnyUpgradeInProgress && !isMiningWood && woodMineLevel < maxLevel && woodMineLevel < palaceLevel && food >= woodMineCosts[woodMineLevel - 1] && wood >= woodMineCosts[woodMineLevel - 1]) {
+            food -= woodMineCosts[woodMineLevel - 1];
+            wood -= woodMineCosts[woodMineLevel - 1];
+            isUpgradingWoodMine = true; // Встановлюємо стан прокачки на true
+            isAnyUpgradeInProgress = true; // Прокачка почалась
+            startUpgrade('woodMine', woodMineLevel, document.getElementById('woodMineProgress'), () => {
+                isUpgradingWoodMine = false; // Змінюємо стан після завершення прокачки
+                isAnyUpgradeInProgress = false; // Прокачка завершена
+                woodMineLevel++;
+                saveState('woodMineLevel', woodMineLevel);
+                updateDisplay();
+            });
+            updateDisplay();
+        }
+    });
 
     document.getElementById('mineFood').addEventListener('click', () => {
         const workers = parseInt(document.getElementById('workersFood').value);
@@ -250,22 +296,27 @@ loadConfig().then(config => {
     }
 
     function updateMiningTimer(timer, endTime, resource, workers) {
-        const buildingTimerElement = document.getElementById(resource + 'MineProgress'); // Таймер на будівлі
+        const buildingTimerElement = document.getElementById(resource + 'MineProgress');
+        const baseResourceGain = 5; // Базове значення видобутку
+        const resourceGainMultiplier = resource === 'food' ? (foodMineLevel - 1) : (woodMineLevel - 1); // Визначаємо множник залежно від рівня шахти
+
         const interval = setInterval(() => {
             const remainingTime = endTime - Date.now();
             if (remainingTime <= 0) {
                 clearInterval(interval);
                 const resourceType = miningData[timer.id].resource;
-                if (resourceType === 'food') {
-                    food += resourceGain * workers;
-                    isMiningFood = false; // Скидаємо статус видобутку їжі після завершення
-                } else if (resourceType === 'wood') {
-                    wood += resourceGain * workers;
-                    isMiningWood = false; // Скидаємо статус видобутку деревини після завершення
-                }
-                availableWorkers += workers; // Повертаємо робітників після завершення видобутку
 
-                // Зберігаємо ресурси та доступних робітників у localStorage
+                if (resourceType === 'food') {
+                    // Видобуток їжі збільшується на 1 за кожен рівень шахти
+                    food += (baseResourceGain + resourceGainMultiplier) * workers;
+                    isMiningFood = false;
+                } else if (resourceType === 'wood') {
+                    // Видобуток дерева збільшується на 1 за кожен рівень шахти
+                    wood += (baseResourceGain + resourceGainMultiplier) * workers;
+                    isMiningWood = false;
+                }
+
+                availableWorkers += workers;
                 saveState('food', food);
                 saveState('wood', wood);
                 saveState('availableWorkers', availableWorkers);
@@ -273,11 +324,11 @@ loadConfig().then(config => {
                 delete miningData[timer.id];
                 localStorage.setItem('miningData', JSON.stringify(miningData));
                 timer.remove();
-                buildingTimerElement.textContent = ''; // Очищення таймера на будівлі
+                buildingTimerElement.textContent = '';
             } else {
                 const formattedTime = formatTime(remainingTime);
                 timer.textContent = formattedTime;
-                buildingTimerElement.textContent = formattedTime; // Оновлення таймера на будівлі
+                buildingTimerElement.textContent = formattedTime;
             }
         }, 100);
     }
@@ -323,24 +374,27 @@ loadConfig().then(config => {
     function updateDisplay() {
         document.getElementById('palaceLevel').textContent = palaceLevel;
         document.getElementById('workerHouseLevel').textContent = workerHouseLevel;
+        document.getElementById('foodMineLevel').textContent = foodMineLevel;
+        document.getElementById('woodMineLevel').textContent = woodMineLevel;
         document.getElementById('foodBalance').textContent = food;
         document.getElementById('woodBalance').textContent = wood;
         document.getElementById('availableWorkers').textContent = availableWorkers;
         document.getElementById('palaceCost').textContent = `${palaceCosts[palaceLevel - 1]} food, ${palaceCosts[palaceLevel - 1]} wood`;
         document.getElementById('workerHouseCost').textContent = `${workerHouseCosts[workerHouseLevel - 1]} food, ${workerHouseCosts[workerHouseLevel - 1]} wood`;
+        document.getElementById('foodMineCost').textContent = `${foodMineCosts[foodMineLevel - 1]} food, ${foodMineCosts[foodMineLevel - 1]} wood`;
+        document.getElementById('woodMineCost').textContent = `${woodMineCosts[woodMineLevel - 1]} food, ${woodMineCosts[woodMineLevel - 1]} wood`;
 
-        saveState('palaceLevel', palaceLevel);
-        saveState('workerHouseLevel', workerHouseLevel);
-        saveState('availableWorkers', availableWorkers);
-        saveState('food', food);
-        saveState('wood', wood);
-
-        // Оновлення максимального значення слайдера
         updateSliderMax();
 
-        // Блокування або розблокування кнопок видобутку
-        document.getElementById('mineFood').disabled = isMiningFood;
-        document.getElementById('mineWood').disabled = isMiningWood;
+        // Блокування кнопок прокачки і видобутку залежно від стану
+        document.getElementById('mineFood').disabled = isMiningFood || isUpgradingFoodMine;
+        document.getElementById('mineWood').disabled = isMiningWood || isUpgradingWoodMine;
+
+        // Блокування кнопок прокачки палацу та будинку робітників під час виконання
+        document.getElementById('upgradePalace').disabled = isAnyUpgradeInProgress;
+        document.getElementById('upgradeFoodMine').disabled = isAnyUpgradeInProgress || isMiningFood|| (foodMineLevel >= palaceLevel);
+        document.getElementById('upgradeWoodMine').disabled = isAnyUpgradeInProgress || isMiningWood|| (woodMineLevel >= palaceLevel);
+        document.getElementById('upgradeWorkerHouse').disabled = isAnyUpgradeInProgress|| (workerHouseLevel >= palaceLevel);
     }
 
     function loadState(key, defaultValue) {
