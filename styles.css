@@ -254,7 +254,7 @@ input[type="range"]::-moz-range-thumb {
     grid-row: 14 / span var(--span-count);
     transform: translate(37%, 0%);
 }
-/**/
+/*
 #barracks2 {
     grid-column: 3 / span var(--span-count);
     grid-row: 6 / span var(--span-count);
@@ -275,7 +275,7 @@ input[type="range"]::-moz-range-thumb {
     grid-row: 9 / span var(--span-count);
     transform: translate(13%, 9%);
 }
-/**/
+/*
 #barracks6 {
     grid-column: 6 / span var(--span-count);
     grid-row: 11 / span var(--span-count);
@@ -296,3 +296,4 @@ input[type="range"]::-moz-range-thumb {
     grid-row: 11 / span var(--span-count);
     transform: translate(40%, 29%);
 }
+*/
