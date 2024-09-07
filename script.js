@@ -297,8 +297,8 @@ loadConfig().then(config => {
 
     function updateMiningTimer(timer, endTime, resource, workers) {
         const buildingTimerElement = document.getElementById(resource + 'MineProgress');
-        const baseResourceGain = 5; // Базове значення видобутку
-        const resourceGainMultiplier = resource === 'food' ? (foodMineLevel - 1) : (woodMineLevel - 1); // Визначаємо множник залежно від рівня шахти
+        const baseResourceGain = resourceGain; // Базове значення видобутку
+        const resourceGainMultiplier = resource === 'food' ? (foodMineLevel) : (woodMineLevel); // Визначаємо множник залежно від рівня шахти
 
         const interval = setInterval(() => {
             const remainingTime = endTime - Date.now();
