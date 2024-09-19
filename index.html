@@ -8,13 +8,19 @@
         // Ініціалізуємо Telegram WebApp API
         window.Telegram.WebApp.ready();
 
-        // Отримуємо інформацію про користувача з Telegram WebApp
-        const user = window.Telegram.WebApp.initDataUnsafe.user;
+        // Отримуємо інформацію про WebApp і дані користувача
+        const webApp = window.Telegram.WebApp;
+
+        // Виводимо всю доступну інформацію в консоль для відладки
+        console.log("WebApp initData:", webApp.initData);
+        console.log("WebApp initDataUnsafe:", webApp.initDataUnsafe);
+
+        const user = webApp.initDataUnsafe.user;
 
         // Перевіряємо, чи передані дані про користувача
         if (user) {
             // Виводимо інформацію про користувача в консоль
-            console.log(user);
+            console.log("User Info:", user);
 
             // Оновлюємо інформацію на сторінці
             document.addEventListener("DOMContentLoaded", function() {
@@ -25,6 +31,12 @@
             });
         } else {
             console.error("User information not available from Telegram WebApp");
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById("userId").textContent = "User ID: Not available";
+                document.getElementById("firstName").textContent = "First Name: Not available";
+                document.getElementById("lastName").textContent = "Last Name: Not available";
+                document.getElementById("username").textContent = "Username: Not available";
+            });
         }
     </script>
 </head>
