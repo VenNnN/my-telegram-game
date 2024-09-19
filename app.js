@@ -56,21 +56,29 @@ function updateUI(data) {
     document.getElementById('workerHouseLevel').textContent = data.worker_house_level;
 }
 
-// Функція для запуску апгрейду
+// Функція для запуску апгрейду з таймером
 async function startUpgrade(building) {
     let endpoint = '';
+    let upgradeDurationKey = '';
+    let buildingElement = '';
+
+    // Вибір endpoint для будівлі
     switch (building) {
         case 'palace':
             endpoint = `/users/${user_id}/start_upgrade_palace/`;
+            buildingElement = document.getElementById('palaceUpgradeTimer');
             break;
         case 'farm':
             endpoint = `/users/${user_id}/start_upgrade_food_farm/`;
+            buildingElement = document.getElementById('farmUpgradeTimer');
             break;
         case 'woodMine':
             endpoint = `/users/${user_id}/start_upgrade_wood_mine/`;
+            buildingElement = document.getElementById('woodMineUpgradeTimer');
             break;
         case 'workerHouse':
             endpoint = `/users/${user_id}/start_upgrade_worker_house/`;
+            buildingElement = document.getElementById('workerHouseUpgradeTimer');
             break;
     }
 
@@ -81,7 +89,16 @@ async function startUpgrade(building) {
 
         if (response.ok) {
             const data = await response.json();
+
+            // Отримуємо час початку апгрейду та тривалість
+            const startTime = new Date(data.palace_upgrade_start_time);  // Час початку
+            const upgradeDuration = data.upgrade_duration * 1000;  // Тривалість у мілісекундах
+
             alert(`${building.charAt(0).toUpperCase() + building.slice(1)} upgrade started!`);
+
+            // Оновлюємо таймер
+            startCountdownTimer(startTime, upgradeDuration, buildingElement);
+
             getInitialData(); // Оновлюємо дані після апгрейду
         } else {
             const error = await response.json();
@@ -90,6 +107,27 @@ async function startUpgrade(building) {
     } catch (error) {
         console.error("Error:", error);
     }
+}
+
+// Функція для запуску таймера зворотного відліку
+function startCountdownTimer(startTime, upgradeDuration, element) {
+    const endTime = new Date(startTime.getTime() + upgradeDuration);
+
+    const timerInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const timeLeft = endTime - now;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            element.textContent = "Upgrade complete!";
+        } else {
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            element.textContent = `Time left: ${hours}h ${minutes}m ${seconds}s`;
+        }
+    }, 1000);
 }
 
 // Функція для завершення апгрейду

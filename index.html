@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Buildings</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
 <div class="container">
     <h1>Game Buildings</h1>
     <div class="resources">
@@ -24,30 +14,31 @@
         <h2>Palace - Level <span id="palaceLevel">1</span></h2>
         <button id="palaceUpgradeBtn" onclick="startUpgrade('palace')">Start Upgrade</button>
         <button id="palaceFinishUpgradeBtn" onclick="finishUpgrade('palace')">Finish Upgrade</button>
+        <p id="palaceUpgradeTimer">No upgrade in progress</p> <!-- Таймер для палацу -->
     </div>
 
     <div class="building" id="farm">
         <h2>Farm - Level <span id="farmLevel">1</span></h2>
         <button id="farmUpgradeBtn" onclick="startUpgrade('farm')">Start Upgrade</button>
         <button id="farmFinishUpgradeBtn" onclick="finishUpgrade('farm')">Finish Upgrade</button>
+        <p id="farmUpgradeTimer">No upgrade in progress</p> <!-- Таймер для ферми -->
     </div>
 
     <div class="building" id="woodMine">
         <h2>Wood Mine - Level <span id="woodMineLevel">1</span></h2>
         <button id="woodMineUpgradeBtn" onclick="startUpgrade('woodMine')">Start Upgrade</button>
         <button id="woodMineFinishUpgradeBtn" onclick="finishUpgrade('woodMine')">Finish Upgrade</button>
+        <p id="woodMineUpgradeTimer">No upgrade in progress</p> <!-- Таймер для лісопилки -->
     </div>
 
     <div class="building" id="workerHouse">
         <h2>Worker House - Level <span id="workerHouseLevel">1</span></h2>
         <button id="workerHouseUpgradeBtn" onclick="startUpgrade('workerHouse')">Start Upgrade</button>
         <button id="workerHouseFinishUpgradeBtn" onclick="finishUpgrade('workerHouse')">Finish Upgrade</button>
+        <p id="workerHouseUpgradeTimer">No upgrade in progress</p> <!-- Таймер для будинку для працівників -->
     </div>
 </div>
 
 <!-- Підключаємо Telegram Web Apps API -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="app.js"></script>
-
-</body>
-</html>
