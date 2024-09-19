@@ -11,17 +11,16 @@
         // Отримуємо інформацію про WebApp і дані користувача
         const webApp = window.Telegram.WebApp;
 
-        // Виводимо всю доступну інформацію в консоль для відладки
-        console.log("WebApp initData:", webApp.initData);
-        console.log("WebApp initDataUnsafe:", webApp.initDataUnsafe);
+        // Виводимо інформацію про WebApp на сторінку для відладки
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("initData").textContent = `initData: ${webApp.initData}`;
+            document.getElementById("initDataUnsafe").textContent = `initDataUnsafe: ${JSON.stringify(webApp.initDataUnsafe)}`;
+        });
 
         const user = webApp.initDataUnsafe.user;
 
         // Перевіряємо, чи передані дані про користувача
         if (user) {
-            // Виводимо інформацію про користувача в консоль
-            console.log("User Info:", user);
-
             // Оновлюємо інформацію на сторінці
             document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById("userId").textContent = `User ID: ${user.id}`;
@@ -30,7 +29,6 @@
                 document.getElementById("username").textContent = `Username: ${user.username ? user.username : 'Not provided'}`;
             });
         } else {
-            console.error("User information not available from Telegram WebApp");
             document.addEventListener("DOMContentLoaded", function() {
                 document.getElementById("userId").textContent = "User ID: Not available";
                 document.getElementById("firstName").textContent = "First Name: Not available";
@@ -46,5 +44,10 @@
     <p id="firstName">First Name: Not available</p>
     <p id="lastName">Last Name: Not available</p>
     <p id="username">Username: Not available</p>
+
+    <!-- Додаткові елементи для відображення initData та initDataUnsafe -->
+    <h2>Debug Info</h2>
+    <p id="initData">initData: Not available</p>
+    <p id="initDataUnsafe">initDataUnsafe: Not available</p>
 </body>
 </html>
