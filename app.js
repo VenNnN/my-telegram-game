@@ -1,25 +1,23 @@
 const apiUrl = 'https://c80c-91-210-250-82.ngrok-free.app'; // Зміни на свою адресу, якщо треба
-let user_id; // Встановлюємо user_id як змінну
+let user_id; // Тепер user_id буде отримуватися з Telegram
 
 // Перевіряємо, чи API доступний
 if (window.Telegram && window.Telegram.WebApp) {
     // Ініціалізуємо Telegram WebApp API
-    window.Telegram.WebApp.ready();
+    let tg = window.Telegram.WebApp;
+    tg.ready();  // Сигналізуємо, що додаток готовий до роботи
 
     // Отримуємо дані користувача
-    const user = window.Telegram.WebApp.initDataUnsafe.user;
+    const user = tg.initDataUnsafe.user;
 
     if (user) {
         user_id = user.id; // Зберігаємо user_id
-        document.getElementById("userId").textContent = `User ID: ${user.id}`;
-        document.getElementById("firstName").textContent = `First Name: ${user.first_name}`;
-        document.getElementById("lastName").textContent = `Last Name: ${user.last_name || 'Not provided'}`;
-        document.getElementById("username").textContent = `Username: ${user.username || 'Not provided'}`;
+        console.log("User ID from Telegram: ", user_id);
 
-        // Отримуємо початкові дані для цього користувача
+        // Отримати початкові дані при завантаженні сторінки
         getInitialData();
     } else {
-        document.getElementById("userId").textContent = "User ID: Not available";
+        console.error("User data is not available.");
     }
 } else {
     console.log("Telegram WebApp API is not available.");
