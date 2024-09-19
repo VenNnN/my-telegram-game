@@ -1,7 +1,10 @@
+/* Робимо всі текстові елементи зеленими */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
+    color: #4CAF50; /* Зелений колір для всього тексту */
 }
+
 .container {
     width: 800px;
     margin: 0 auto;
@@ -9,19 +12,31 @@ body {
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+/* Зробимо заголовки також зеленими */
 h1 {
     text-align: center;
     color: #4CAF50; /* Робимо заголовок зеленим */
 }
+
+h2 {
+    color: #4CAF50; /* Робимо підзаголовки зеленими */
+}
+
+/* Текст у параграфах теж зелений */
 p {
     color: #4CAF50; /* Робимо текст зеленим */
 }
+
+/* Текст у ресурсах */
 .resources {
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
     color: #4CAF50; /* Робимо текст у ресурсах зеленим */
 }
+
+/* Текст у будівлях */
 .building {
     border: 1px solid #ccc;
     padding: 20px;
@@ -31,10 +46,8 @@ p {
     align-items: center;
     color: #4CAF50; /* Робимо текст у будівлях зеленим */
 }
-.building h2 {
-    margin: 0;
-    color: #4CAF50; /* Робимо заголовки будівель зеленими */
-}
+
+/* Кнопки */
 .building button {
     padding: 10px 15px;
     background-color: #4CAF50;
@@ -42,6 +55,7 @@ p {
     border: none;
     cursor: pointer;
 }
+
 .building button:disabled {
     background-color: #ccc;
 }
