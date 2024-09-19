@@ -3,51 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram User Info</title>
-    <script>
-        // Ініціалізуємо Telegram WebApp API
-        window.Telegram.WebApp.ready();
-
-        // Отримуємо інформацію про WebApp і дані користувача
-        const webApp = window.Telegram.WebApp;
-
-        // Виводимо інформацію про WebApp на сторінку для відладки
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("initData").textContent = `initData: ${webApp.initData}`;
-            document.getElementById("initDataUnsafe").textContent = `initDataUnsafe: ${JSON.stringify(webApp.initDataUnsafe)}`;
-        });
-
-        const user = webApp.initDataUnsafe.user;
-
-        // Перевіряємо, чи передані дані про користувача
-        if (user) {
-            // Оновлюємо інформацію на сторінці
-            document.addEventListener("DOMContentLoaded", function() {
-                document.getElementById("userId").textContent = `User ID: ${user.id}`;
-                document.getElementById("firstName").textContent = `First Name: ${user.first_name}`;
-                document.getElementById("lastName").textContent = `Last Name: ${user.last_name ? user.last_name : 'Not provided'}`;
-                document.getElementById("username").textContent = `Username: ${user.username ? user.username : 'Not provided'}`;
-            });
-        } else {
-            document.addEventListener("DOMContentLoaded", function() {
-                document.getElementById("userId").textContent = "User ID: Not available";
-                document.getElementById("firstName").textContent = "First Name: Not available";
-                document.getElementById("lastName").textContent = "Last Name: Not available";
-                document.getElementById("username").textContent = "Username: Not available";
-            });
-        }
-    </script>
+    <title>Game Buildings</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Telegram User Info</h1>
-    <p id="userId">User ID: Not available</p>
-    <p id="firstName">First Name: Not available</p>
-    <p id="lastName">Last Name: Not available</p>
-    <p id="username">Username: Not available</p>
 
-    <!-- Додаткові елементи для відображення initData та initDataUnsafe -->
-    <h2>Debug Info</h2>
-    <p id="initData">initData: Not available</p>
-    <p id="initDataUnsafe">initDataUnsafe: Not available</p>
+<div class="container">
+    <h1>Game Buildings</h1>
+    <div class="resources">
+        <div id="resources">
+            <p>Wood: <span id="wood">0</span></p>
+            <p>Food: <span id="food">0</span></p>
+        </div>
+        <div id="workers">
+            <p>Total Workers: <span id="totalWorkers">0</span></p>
+        </div>
+    </div>
+
+    <div class="building" id="palace">
+        <h2>Palace - Level <span id="palaceLevel">1</span></h2>
+        <button id="palaceUpgradeBtn" onclick="startUpgrade('palace')">Start Upgrade</button>
+        <button id="palaceFinishUpgradeBtn" onclick="finishUpgrade('palace')">Finish Upgrade</button>
+    </div>
+
+    <div class="building" id="farm">
+        <h2>Farm - Level <span id="farmLevel">1</span></h2>
+        <button id="farmUpgradeBtn" onclick="startUpgrade('farm')">Start Upgrade</button>
+        <button id="farmFinishUpgradeBtn" onclick="finishUpgrade('farm')">Finish Upgrade</button>
+    </div>
+
+    <div class="building" id="woodMine">
+        <h2>Wood Mine - Level <span id="woodMineLevel">1</span></h2>
+        <button id="woodMineUpgradeBtn" onclick="startUpgrade('woodMine')">Start Upgrade</button>
+        <button id="woodMineFinishUpgradeBtn" onclick="finishUpgrade('woodMine')">Finish Upgrade</button>
+    </div>
+
+    <div class="building" id="workerHouse">
+        <h2>Worker House - Level <span id="workerHouseLevel">1</span></h2>
+        <button id="workerHouseUpgradeBtn" onclick="startUpgrade('workerHouse')">Start Upgrade</button>
+        <button id="workerHouseFinishUpgradeBtn" onclick="finishUpgrade('workerHouse')">Finish Upgrade</button>
+    </div>
+</div>
+
+<script src="app.js"></script>
+
 </body>
 </html>
