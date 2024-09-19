@@ -2,217 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Resource Management Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Buildings</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Resource Balance -->
-    <div id="resourcesBalance">
-        <p>🍞 Food: <span id="foodBalance">0</span></p>
-        <p>🪵 Wood: <span id="woodBalance">0</span></p>
-        <p>👷 Workers: <span id="availableWorkers">0</span></p>
+
+<div class="container">
+    <h1>Game Buildings</h1>
+    <div class="resources">
+        <div id="resources">
+            <p>Wood: <span id="wood">0</span></p>
+            <p>Food: <span id="food">0</span></p>
+        </div>
+        <div id="workers">
+            <p>Total Workers: <span id="totalWorkers">0</span></p>
+        </div>
     </div>
 
-    <!-- Main View -->
-    <div id="mainView" class="view-grid">
-        <!-- Worker House -->
-        <div id="workerHouse" class="building">
-            <span class="level" id="workerHouseLevel">1</span>
-            <img src="images/workerHouse.png" alt="Worker House" onclick="toggleInfo('workerHouse')">
-            <div class="info">
-                <div id="workerHouseProgress" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="workerHouseInfo" class="extraInfo" style="display: none;">
-            <button id="closeWorkerHouseInfo" class="closeBtn">&times;</button>
-            <img src="images/workerHouse.png" alt="Worker House" class="infoImage">
-            <div class="tooltip">Upgrade cost: <span id="workerHouseCost">50 food, 50 wood</span></div>
-            <button id="upgradeWorkerHouse" class="upgradeBtn" disabled>Upgrade</button>
-        </div>
-
-        <!-- Palace -->
-        <div id="palace" class="building">
-            <span class="level" id="palaceLevel">1</span>
-            <img src="images/palace.png" alt="Palace" onclick="toggleInfo('palace')">
-            <div class="info">
-                <div id="palaceProgress" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="palaceInfo" class="extraInfo" style="display: none;">
-            <button id="closePalaceInfo" class="closeBtn">&times;</button>
-            <img src="images/palace.png" alt="Palace" class="infoImage"> <!-- Додаємо зображення будівлі -->
-            <div class="tooltip">Upgrade cost: <span id="palaceCost">100 food, 100 wood</span></div>
-            <button id="upgradePalace" class="upgradeBtn" disabled>Upgrade</button>
-        </div>
-
-        <!-- Mines -->
-        <div id="foodMine" class="mine">
-            <span class="level" id="foodMineLevel">1</span>
-            <img src="images/foodMine.png" alt="Food Mine" onclick="toggleInfo('foodMine')">
-            <div class="info">
-                <div id="foodMineProgress" class="progressTimer"></div> <!-- Новий таймер -->
-            </div>
-        </div>
-        <div id="foodMineInfo" class="extraInfo" style="display: none;">
-            <button id="closeFoodMineInfo" class="closeBtn">&times;</button>
-            <img src="images/foodMine.png" alt="FoodMine" class="infoImage">
-            <input type="range" id="workersFood" min="0" max="0" value="0" style="width: 70%;">
-            <span id="workersFoodValue">0</span>
-            <button id="mineFood" class="mineBtn">Send Workers</button>
-            <div id="foodMineProgressContainer"></div>
-            <button id="upgradeFoodMine" class="upgradeBtn" disabled>Upgrade Food Mine</button>
-            <div class="tooltip">Upgrade cost: <span id="foodMineCost">20 food, 20 wood</span></div>
-        </div>
-
-        <div id="woodMine" class="mine">
-            <span class="level" id="woodMineLevel">1</span>
-            <img src="images/woodMine.png" alt="Wood Mine" onclick="toggleInfo('woodMine')">
-            <div class="info">
-                <div id="woodMineProgress" class="progressTimer"></div> <!-- Новий таймер -->
-            </div>
-        </div>
-        <div id="woodMineInfo" class="extraInfo" style="display: none;">
-            <button id="closeWoodMineInfo" class="closeBtn">&times;</button>
-            <img src="images/woodMine.png" alt="WoodMine" class="infoImage">
-            <input type="range" id="workersWood" min="0" max="0" value="0" style="width: 70%;">
-            <span id="workersWoodValue">0</span>
-            <button id="mineWood" class="mineBtn">Send Workers</button>
-            <div id="woodMineProgressContainer"></div>
-            <!-- Нова кнопка прокачки шахти для дерева -->
-            <button id="upgradeWoodMine" class="upgradeBtn" disabled>Upgrade Wood Mine</button>
-            <div class="tooltip">Upgrade cost: <span id="woodMineCost">30 food, 30 wood</span></div>
-        </div>
-
-        <!-- Barracks -->
-        <!-- Barracks 1 -->
-        <div id="barracks" class="building">
-            <span class="level" id="barracksLevel">1</span>
-            <img src="images/barracks.png" alt="Barracks" onclick="toggleInfo('barracks')">
-            <div class="info">
-                <div id="barracksProgress" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="barracksInfo" class="extraInfo" style="display: none;">
-            <button id="closeBarracksInfo" class="closeBtn">&times;</button>
-            <img src="images/barracks.png" alt="Barracks" class="infoImage"> <!-- Додаємо зображення будівлі -->
-            <div class="tooltip">Upgrade cost: <span id="barracksCost">200 food, 200 wood</span></div>
-            <button id="upgradeBarracks" class="upgradeBtn">Upgrade</button>
-        </div>
-
-        <!-- Barracks 2
-        <div id="barracks2" class="building">
-            <span class="level" id="barracksLevel2">1</span>
-            <img src="images/barracks.png" alt="Barracks" onclick="toggleInfo('barracks2')">
-            <div class="info">
-                <div id="barracksProgress2" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="barracksInfo2" class="extraInfo" style="display: none;">
-            <button id="closeBarracksInfo2" class="closeBtn">&times;</button>
-            <button id="upgradeBarracks2" class="upgradeBtn">Upgrade</button>
-            <div class="tooltip">Upgrade cost: <span id="barracksCost2">200 food, 200 wood</span></div>
-        </div>
-
-        <div id="barracks3" class="building">
-            <span class="level" id="barracksLevel3">1</span>
-            <img src="images/barracks.png" alt="Barracks" onclick="toggleInfo('barracks3')">
-            <div class="info">
-                <div id="barracksProgress3" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="barracksInfo3" class="extraInfo" style="display: none;">
-            <button id="closeBarracksInfo3" class="closeBtn">&times;</button>
-            <button id="upgradeBarracks3" class="upgradeBtn">Upgrade</button>
-            <div class="tooltip">Upgrade cost: <span id="barracksCost3">200 food, 200 wood</span></div>
-        </div>
-
-        <div id="barracks4" class="building">
-            <span class="level" id="barracksLevel4">1</span>
-            <img src="images/barracks.png" alt="Barracks" onclick="toggleInfo('barracks4')">
-            <div class="info">
-                <div id="barracksProgress4" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="barracksInfo4" class="extraInfo" style="display: none;">
-            <button id="closeBarracksInfo4" class="closeBtn">&times;</button>
-            <button id="upgradeBarracks4" class="upgradeBtn">Upgrade</button>
-            <div class="tooltip">Upgrade cost: <span id="barracksCost4">200 food, 200 wood</span></div>
-        </div>
-
-        <div id="barracks5" class="building">
-            <span class="level" id="barracksLevel5">1</span>
-            <img src="images/barracks.png" alt="Barracks" onclick="toggleInfo('barracks5')">
-            <div class="info">
-                <div id="barracksProgress5" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="barracksInfo5" class="extraInfo" style="display: none;">
-            <button id="closeBarracksInfo5" class="closeBtn">&times;</button>
-            <button id="upgradeBarracks5" class="upgradeBtn">Upgrade</button>
-            <div class="tooltip">Upgrade cost: <span id="barracksCost5">200 food, 200 wood</span></div>
-        </div>
-
-        <div id="barracks6" class="building">
-            <span class="level" id="barracksLevel6">1</span>
-            <img src="images/barracks.png" alt="Barracks" onclick="toggleInfo('barracks6')">
-            <div class="info">
-                <div id="barracksProgress6" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="barracksInfo6" class="extraInfo" style="display: none;">
-            <button id="closeBarracksInfo6" class="closeBtn">&times;</button>
-            <button id="upgradeBarracks6" class="upgradeBtn">Upgrade</button>
-            <div class="tooltip">Upgrade cost: <span id="barracksCost6">200 food, 200 wood</span></div>
-        </div>
-
-        <div id="barracks7" class="building">
-            <span class="level" id="barracksLevel7">1</span>
-            <img src="images/barracks.png" alt="Barracks" onclick="toggleInfo('barracks7')">
-            <div class="info">
-                <div id="barracksProgress7" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="barracksInfo7" class="extraInfo" style="display: none;">
-            <button id="closeBarracksInfo7" class="closeBtn">&times;</button>
-            <button id="upgradeBarracks7" class="upgradeBtn">Upgrade</button>
-            <div class="tooltip">Upgrade cost: <span id="barracksCost7">200 food, 200 wood</span></div>
-        </div>
-
-        <div id="barracks8" class="building">
-            <span class="level" id="barracksLevel8">1</span>
-            <img src="images/barracks.png" alt="Barracks" onclick="toggleInfo('barracks8')">
-            <div class="info">
-                <div id="barracksProgress8" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="barracksInfo8" class="extraInfo" style="display: none;">
-            <button id="closeBarracksInfo8" class="closeBtn">&times;</button>
-            <button id="upgradeBarracks8" class="upgradeBtn">Upgrade</button>
-            <div class="tooltip">Upgrade cost: <span id="barracksCost8">200 food, 200 wood</span></div>
-        </div>
-
-        <div id="barracks9" class="building">
-            <span class="level" id="barracksLevel9">1</span>
-            <img src="images/barracks.png" alt="Barracks" onclick="toggleInfo('barracks9')">
-            <div class="info">
-                <div id="barracksProgress9" class="progressTimer"></div>
-            </div>
-        </div>
-        <div id="barracksInfo9" class="extraInfo" style="display: none;">
-            <button id="closeBarracksInfo9" class="closeBtn">&times;</button>
-            <button id="upgradeBarracks9" class="upgradeBtn">Upgrade</button>
-            <div class="tooltip">Upgrade cost: <span id="barracksCost9">200 food, 200 wood</span></div>
-        </div> -->
+    <div class="building" id="palace">
+        <h2>Palace - Level <span id="palaceLevel">1</span></h2>
+        <button id="palaceUpgradeBtn" onclick="startUpgrade('palace')">Start Upgrade</button>
+        <button id="palaceFinishUpgradeBtn" onclick="finishUpgrade('palace')">Finish Upgrade</button>
     </div>
 
-    <!-- Navigation Buttons -->
-    <div id="navbar">
-        <button id="buildingsViewBtn">Buildings</button>
-        <button id="minesViewBtn">Mines</button>
-        <button id="resetBtn">Reset</button>
+    <div class="building" id="farm">
+        <h2>Farm - Level <span id="farmLevel">1</span></h2>
+        <button id="farmUpgradeBtn" onclick="startUpgrade('farm')">Start Upgrade</button>
+        <button id="farmFinishUpgradeBtn" onclick="finishUpgrade('farm')">Finish Upgrade</button>
     </div>
 
-    <script src="script.js"></script>
+    <div class="building" id="woodMine">
+        <h2>Wood Mine - Level <span id="woodMineLevel">1</span></h2>
+        <button id="woodMineUpgradeBtn" onclick="startUpgrade('woodMine')">Start Upgrade</button>
+        <button id="woodMineFinishUpgradeBtn" onclick="finishUpgrade('woodMine')">Finish Upgrade</button>
+    </div>
+
+    <div class="building" id="workerHouse">
+        <h2>Worker House - Level <span id="workerHouseLevel">1</span></h2>
+        <button id="workerHouseUpgradeBtn" onclick="startUpgrade('workerHouse')">Start Upgrade</button>
+        <button id="workerHouseFinishUpgradeBtn" onclick="finishUpgrade('workerHouse')">Finish Upgrade</button>
+    </div>
+</div>
+
+<script src="app.js"></script>
+
 </body>
 </html>

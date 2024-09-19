@@ -1,299 +1,40 @@
 body {
     font-family: Arial, sans-serif;
-    background-image: url('images/back.jpg');
-    background-size: 100% 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #fff;
+    background-color: #f0f0f0;
 }
-
-#resourcesBalance {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2vw;
-    background-color: #4CAF50;
-    padding: 1vh 2vw;
-    font-size: 2vh;
-    border-bottom: 1px solid white;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1000;
-    height: 8vh;
+.container {
+    width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
-#navbar {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color: #000;
-    padding: 0;
-    font-size: 2vh;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1000;
-    height: 10vh;
-}
-
-#navbar button {
-    flex: 1;
-    margin: 0;
-    height: 100%;
-    border: none;
-    background-color: #4CAF50;
-    color: white;
-    font-size: 2vh;
-    cursor: pointer;
-    border-radius: 0;
+h1 {
     text-align: center;
 }
-
-#navbar #resetBtn {
-    background-color: #f44336 !important;
-}
-
-#mainView {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(20, 1fr);
-    gap: 0;
-    justify-items: center;
-    align-items: center;
-    width: 100vw;
-    height: calc(100vh - 20vh);
-    margin-top: 10vh;
-    margin-bottom: 10vh;
-    position: relative;
-}
-
-.building, .mine {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    background: none;
-    box-shadow: none;
+.resources {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.building {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    overflow: visible;
 }
-
-.building .level, .mine .level {
-    position: absolute;
-    top: 85%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.3vh;
-    font-weight: bold;
+.building h2 {
+    margin: 0;
+}
+.building button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
     color: white;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 0.3em 0.6em;
-    border-radius: 5px;
-    pointer-events: none;
-    z-index: 10;
-}
-
-.building img, .mine img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.info, .extraInfo {
-    font-size: 2vh;
-}
-
-.extraInfo {
-    position: fixed; /* Встановлюємо фіксоване позиціонування для розтягування на весь екран */
-    top: 10vh; /* Залишаємо місце для панелі ресурсів */
-    left: 0;
-    right: 0;
-    bottom: 0; /* Задаємо відступи від усіх країв */
-    background-color: rgba(0, 0, 0, 0.9); /* Робимо фон трохи темнішим для кращого контрасту */
-    padding: 2vh 2vw; /* Додаємо відступи всередині вікна */
-    border-radius: 0; /* Видаляємо закруглення, щоб вікно виглядало як модальне */
-    width: auto;
-    height: calc(100vh - 10vh); /* Задаємо висоту з урахуванням панелі ресурсів */
-    z-index: 2000; /* Забезпечуємо, щоб елемент був на передньому плані */
-    display: none; /* Початково приховано */
-    overflow-y: auto; /* Додаємо прокручування, якщо контент перевищує висоту екрану */
-    color: white; /* Текст білим кольором */
-}
-
-.closeBtn {
-    position: absolute;
-    top: 1vh; /* Відступ від верхнього краю */
-    right: 1vh; /* Відступ від правого краю */
-    background: none;
     border: none;
-    font-size: 3vh;
-    cursor: pointer;
-    color: white; /* Колір хрестика */
-    z-index: 2100; /* Вищий індекс, щоб переконатися, що кнопка буде видима поверх інших елементів */
-}
-
-.infoImage {
-    width: 40%; /* Ширина зображення у відсотках від ширини екрану */
-    max-width: 150px; /* Максимальна ширина, щоб не було надто великим на великих екранах */
-    height: auto; /* Зберігаємо співвідношення сторін */
-    display: block; /* Блочне відображення */
-    margin: 10px auto; /* Центрування зображення */
-}
-
-.tooltip {
-    margin-top: 1vh;
-    font-size: 2vh;
-    color: #fff;
-}
-
-.progressTimer {
-    position: absolute; /* Фіксоване позиціонування для розміщення поверх будівлі */
-    top: 50%; /* Вирівнювання по вертикалі по центру будівлі */
-    left: 50%; /* Вирівнювання по горизонталі по центру будівлі */
-    transform: translate(-50%, -50%); /* Центрування по обох осях */
-    background-color: rgba(0, 0, 0, 0.7);
-    font-size: 2vh; /* Розмір шрифту для таймера */
-    font-weight: bold; /* Напівжирний текст для видимості */
-    color: white; /* Колір тексту */
-    z-index: 1500; /* Досить високий z-index, щоб таймер був поверх будівлі */
-    pointer-events: none; /* Вимкнення взаємодії з таймером */
-}
-
-/* Стиль для таймера видобутку на будівлях */
-#foodMineProgress, #woodMineProgress {
-    background-color: rgba(0, 0, 0, 0.7); /* Жовтий фон для видобутку */
-    font-size: 2vh; /* Розмір шрифту */
-    font-weight: bold;
-    color: yellow;
-    position: absolute;
-    top: 50%; /* Вирівнювання по вертикалі */
-    left: 50%; /* Вирівнювання по горизонталі */
-    transform: translate(-50%, -50%);
-    z-index: 1500; /* Вищий індекс для видимості поверх будівлі */
-    pointer-events: none;
-}
-
-input[type="range"] {
-    -webkit-appearance: none;
-    width: 70%;
-    background: #ddd;
-    height: 5px;
-    border-radius: 5px;
-    margin: 10px 0;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 15px;
-    height: 15px;
-    background: #4CAF50;
-    border-radius: 50%;
     cursor: pointer;
 }
-
-input[type="range"]::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
-    background: #4CAF50;
-    border-radius: 50%;
-    cursor: pointer;
+.building button:disabled {
+    background-color: #ccc;
 }
-
-.mineBtn:disabled {
-    background-color: #a9a9a9;
-    cursor: not-allowed;
-}
-
-.upgradeBtn:disabled {
-    background-color: #a9a9a9;
-    cursor: not-allowed;
-}
-
-/* builds */
-:root {
-    --span-count: 2;
-}
-
-#workerHouse {
-    grid-column: 1 / span var(--span-count);
-    grid-row: 9 / span var(--span-count);
-    transform: translate(10%, 9%);
-}
-#woodMine {
-    grid-column: 1 / span var(--span-count);
-    grid-row: 11 / span var(--span-count);
-    transform: translate(10%, 29%);
-}
-#palace {
-    grid-column: 4 / span 4;
-    grid-row: 9 / span 4;
-    transform: translate(-1%, 0%);
-}
-#foodMine {
-    grid-column: 3 / span var(--span-count);
-    grid-row: 11 / span var(--span-count);
-    transform: translate(37%, 29%);
-}
-#barracks {
-    grid-column: 3 / span var(--span-count);
-    grid-row: 14 / span var(--span-count);
-    transform: translate(37%, 0%);
-}
-/*
-#barracks2 {
-    grid-column: 3 / span var(--span-count);
-    grid-row: 6 / span var(--span-count);
-    transform: translate(36%, 38%);
-}
-#barracks3 {
-    grid-column: 3 / span var(--span-count);
-    grid-row: 9 / span var(--span-count);
-    transform: translate(36%, 9%);
-}
-#barracks4 {
-    grid-column: 6 / span var(--span-count);
-    grid-row: 6 / span var(--span-count);
-    transform: translate(13%, 38%);
-}
-#barracks5 {
-    grid-column: 6 / span var(--span-count);
-    grid-row: 9 / span var(--span-count);
-    transform: translate(13%, 9%);
-}
-/*
-#barracks6 {
-    grid-column: 6 / span var(--span-count);
-    grid-row: 11 / span var(--span-count);
-    transform: translate(13%, 29%);
-}
-#barracks7 {
-    grid-column: 6 / span var(--span-count);
-    grid-row: 14 / span var(--span-count);
-    transform: translate(13%, 0%);
-}
-#barracks8 {
-    grid-column: 8 / span var(--span-count);
-    grid-row: 9 / span var(--span-count);
-    transform: translate(40%, 9%);
-}
-#barracks9 {
-    grid-column: 8 / span var(--span-count);
-    grid-row: 11 / span var(--span-count);
-    transform: translate(40%, 29%);
-}
-*/
