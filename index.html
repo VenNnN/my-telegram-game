@@ -13,7 +13,32 @@
 <p>Last Name: <span id="lastName">Loading...</span></p>
 <p>Username: <span id="username">Loading...</span></p>
 
-<script src="app.js"></script>
+<!-- Підключаємо Telegram Web Apps API -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<script>
+    // Перевіряємо, чи API доступний
+    if (window.Telegram && window.Telegram.WebApp) {
+        // Ініціалізуємо Telegram WebApp API
+        let tg = window.Telegram.WebApp;
+        tg.ready();  // Сигналізуємо, що додаток готовий до роботи
+
+        // Отримуємо дані користувача
+        const user = tg.initDataUnsafe.user;
+
+        // Виводимо інформацію про користувача на сторінку
+        if (user) {
+            document.getElementById("userId").textContent = `User ID: ${user.id}`;
+            document.getElementById("firstName").textContent = `First Name: ${user.first_name}`;
+            document.getElementById("lastName").textContent = `Last Name: ${user.last_name || 'Not provided'}`;
+            document.getElementById("username").textContent = `Username: ${user.username || 'Not provided'}`;
+        } else {
+            document.getElementById("userId").textContent = "User ID: Not available";
+        }
+    } else {
+        console.log("Telegram WebApp API is not available.");
+    }
+</script>
 
 </body>
 </html>
