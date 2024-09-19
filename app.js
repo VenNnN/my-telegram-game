@@ -1,14 +1,17 @@
-// Отримуємо параметри з URL
-const urlParams = new URLSearchParams(window.location.search);
-const userId = urlParams.get('user_id');
-const firstName = urlParams.get('first_name');
-const lastName = urlParams.get('last_name');
-const username = urlParams.get('username');
+// Ініціалізуємо Telegram WebApp API
+window.Telegram.WebApp.ready();
+
+// Отримуємо інформацію про користувача з Telegram WebApp
+const user = window.Telegram.WebApp.initDataUnsafe.user;
 
 // Виводимо інформацію на сторінці
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("userId").textContent = `User ID: ${userId}`;
-    document.getElementById("firstName").textContent = `First Name: ${firstName}`;
-    document.getElementById("lastName").textContent = `Last Name: ${lastName || 'Not provided'}`;
-    document.getElementById("username").textContent = `Username: ${username || 'Not provided'}`;
+    if (user) {
+        document.getElementById("userId").textContent = `User ID: ${user.id}`;
+        document.getElementById("firstName").textContent = `First Name: ${user.first_name}`;
+        document.getElementById("lastName").textContent = `Last Name: ${user.last_name || 'Not provided'}`;
+        document.getElementById("username").textContent = `Username: ${user.username || 'Not provided'}`;
+    } else {
+        document.getElementById("userId").textContent = "User data not available.";
+    }
 });
