@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> <!-- Вимкнено зум -->
     <title>Game Buildings</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <div class="container">
-    <h1>Game Buildings</h1>
+    <!-- Місце для імені користувача -->
+    <h1 id="userName">Loading...</h1>
+
     <div class="resources">
         <div id="resources">
             <p>Wood: <span id="wood">0</span></p>
@@ -20,34 +22,56 @@
         </div>
     </div>
 
-    <div class="building" id="palace">
-        <h2>Palace - Level <span id="palaceLevel">1</span></h2>
-        <button id="palaceUpgradeBtn" onclick="startUpgrade('palace')">Start Upgrade</button>
-        <button id="palaceFinishUpgradeBtn" onclick="finishUpgrade('palace')">Finish Upgrade</button>
-    </div>
+    <div class="buildings">
+        <div class="building" id="palace">
+            <h2>Palace - Level <span id="palaceLevel">1</span></h2>
+            <button id="palaceUpgradeBtn" onclick="startUpgrade('palace')">Start Upgrade</button>
+            <button id="palaceFinishUpgradeBtn" onclick="finishUpgrade('palace')">Finish Upgrade</button>
+        </div>
 
-    <div class="building" id="farm">
-        <h2>Farm - Level <span id="farmLevel">1</span></h2>
-        <button id="farmUpgradeBtn" onclick="startUpgrade('farm')">Start Upgrade</button>
-        <button id="farmFinishUpgradeBtn" onclick="finishUpgrade('farm')">Finish Upgrade</button>
-    </div>
+        <div class="building" id="farm">
+            <h2>Farm - Level <span id="farmLevel">1</span></h2>
+            <button id="farmUpgradeBtn" onclick="startUpgrade('farm')">Start Upgrade</button>
+            <button id="farmFinishUpgradeBtn" onclick="finishUpgrade('farm')">Finish Upgrade</button>
+        </div>
 
-    <div class="building" id="woodMine">
-        <h2>Wood Mine - Level <span id="woodMineLevel">1</span></h2>
-        <button id="woodMineUpgradeBtn" onclick="startUpgrade('woodMine')">Start Upgrade</button>
-        <button id="woodMineFinishUpgradeBtn" onclick="finishUpgrade('woodMine')">Finish Upgrade</button>
-    </div>
+        <div class="building" id="woodMine">
+            <h2>Wood Mine - Level <span id="woodMineLevel">1</span></h2>
+            <button id="woodMineUpgradeBtn" onclick="startUpgrade('woodMine')">Start Upgrade</button>
+            <button id="woodMineFinishUpgradeBtn" onclick="finishUpgrade('woodMine')">Finish Upgrade</button>
+        </div>
 
-    <div class="building" id="workerHouse">
-        <h2>Worker House - Level <span id="workerHouseLevel">1</span></h2>
-        <button id="workerHouseUpgradeBtn" onclick="startUpgrade('workerHouse')">Start Upgrade</button>
-        <button id="workerHouseFinishUpgradeBtn" onclick="finishUpgrade('workerHouse')">Finish Upgrade</button>
+        <div class="building" id="workerHouse">
+            <h2>Worker House - Level <span id="workerHouseLevel">1</span></h2>
+            <button id="workerHouseUpgradeBtn" onclick="startUpgrade('workerHouse')">Start Upgrade</button>
+            <button id="workerHouseFinishUpgradeBtn" onclick="finishUpgrade('workerHouse')">Finish Upgrade</button>
+        </div>
     </div>
 </div>
 
 <!-- Підключаємо Telegram Web Apps API -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="app.js"></script>
+
+<script>
+    // Перевіряємо, чи API доступний
+    if (window.Telegram && window.Telegram.WebApp) {
+        let tg = window.Telegram.WebApp;
+        tg.ready(); // Сигналізуємо, що додаток готовий до роботи
+
+        // Отримуємо дані користувача
+        const user = tg.initDataUnsafe.user;
+
+        // Виводимо ім'я користувача на сторінку
+        if (user && user.first_name) {
+            document.getElementById("userName").textContent = `${user.first_name}`;
+        } else {
+            document.getElementById("userName").textContent = "username";
+        }
+    } else {
+        console.log("Telegram WebApp API is not available.");
+    }
+</script>
 
 </body>
 </html>
