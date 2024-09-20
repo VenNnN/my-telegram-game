@@ -1,85 +1,74 @@
-/* Вимикаємо скролінг і зум */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden; /* Забороняємо скрол */
+body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
-    color: #4CAF50; /* Зелений колір для всього тексту */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Контейнер займає всю доступну висоту і ширину */
-.container {
-    width: 100vw; /* Займає всю ширину екрану */
-    height: 100vh; /* Займає всю висоту екрану */
-    padding: 1vh 2vw; /* Зменшені відступи */
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Заголовок */
-h1 {
-    text-align: center;
-    color: #4CAF50; /* Робимо заголовок зеленим */
-    margin: 1vh 0;
-    font-size: 2.5vh; /* Зменшений розмір шрифту */
-}
-
-/* Ресурси */
-.resources {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    font-size: 2vh; /* Ще більше зменшений розмір тексту */
-    margin-bottom: 1vh;
     color: #4CAF50;
 }
 
-/* Контейнер для будівель */
-.buildings {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.container {
     width: 100%;
-    flex-grow: 1; /* Дозволяємо контейнеру будівель займати залишковий простір */
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Кожна будівля займає свою частину простору */
+h1 {
+    text-align: center;
+    color: #4CAF50;
+}
+
+h2 {
+    text-align: center;
+    color: #4CAF50;
+}
+
+p {
+    color: #4CAF50;
+}
+
+.resources, .buildings {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
 .building {
     border: 1px solid #ccc;
-    padding: 1vh; /* Мінімальні відступи */
-    margin-bottom: 0.5vh; /* Ще зменшені відступи між будівлями */
+    padding: 10px;
+    margin: 5px;
+    flex: 1 1 45%;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    text-align: center;
-    color: #4CAF50; /* Робимо текст у будівлях зеленим */
-    font-size: 2vh; /* Зменшений розмір тексту */
-    flex-grow: 1; /* Дозволяємо будівлям розтягуватися рівномірно */
 }
 
-/* Кнопки */
+.building h2 {
+    margin: 0;
+    color: #4CAF50;
+}
+
 .building button {
-    padding: 1vh 1.5vw; /* Зменшені відступи для кнопок */
+    padding: 10px;
     background-color: #4CAF50;
     color: white;
     border: none;
     cursor: pointer;
-    margin: 0.5vh 0;
-    width: 80%; /* Кнопки займають 80% ширини контейнера будівлі */
-    max-width: 150px; /* Ще більше зменшена максимальна ширина кнопок */
-    font-size: 1.5vh; /* Пропорційний зменшений розмір шрифту */
 }
 
-.building button:disabled {
-    background-color: #ccc;
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    font-size: 16px;
 }
