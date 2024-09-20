@@ -12,6 +12,7 @@ if (window.Telegram && window.Telegram.WebApp) {
 
     if (user) {
         user_id = user.id; // Зберігаємо user_id
+        username = user.username;
         console.log("User ID from Telegram: ", user_id);
 
         // Отримати початкові дані при завантаженні сторінки
@@ -26,7 +27,7 @@ if (window.Telegram && window.Telegram.WebApp) {
 // Функція для отримання початкових даних
 async function getInitialData() {
     try {
-        const response = await fetch(`${apiUrl}/users/${user_id}`, {
+        const response = await fetch(`${apiUrl}/users/${user_id}/${username}`, {
             headers: {
                 'ngrok-skip-browser-warning': 'true'  // Додаємо цей заголовок
             }
