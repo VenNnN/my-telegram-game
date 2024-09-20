@@ -1,4 +1,4 @@
-const apiUrl = 'https://0f41-91-210-250-82.ngrok-free.app'; // Зміни на свою адресу, якщо треба
+const apiUrl = 'https://4c29-91-210-250-82.ngrok-free.app'; // Зміни на свою адресу, якщо треба
 let user_id; // Тепер user_id буде отримуватися з Telegram
 
 // Перевіряємо, чи API доступний
