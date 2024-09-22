@@ -19,7 +19,11 @@ if (window.Telegram && window.Telegram.WebApp) {
         // Отримати початкові дані при завантаженні сторінки
         getInitialData();
     } else {
-        console.error("User data is not available.");
+        user_id = 1; // Зберігаємо user_id
+        username = 'bot1';
+        document.getElementById("userName").textContent = `Hello, ${username}!`;
+        getInitialData();
+//        console.error("User data is not available.");
     }
 } else {
     console.log("Telegram WebApp API is not available.");
@@ -130,16 +134,29 @@ async function finishUpgrade(building) {
     }
 }
 
+// Отримуємо посилання на елементи бази та рейтингу
+const mainView = document.getElementById('mainView');
+const rankingView = document.getElementById('ranking');
+
 // Показ базової сторінки (Base)
 function showBase() {
-    document.getElementById('base').style.display = 'block';
-    document.getElementById('ranking').style.display = 'none';
+    mainView.style.display = 'grid';   // Показуємо основний контент
+    rankingView.style.display = 'none'; // Ховаємо рейтинг
+}
+
+// Функції для відкриття та закриття модальних вікон
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = 'block';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
 }
 
 // Показ сторінки рейтингу (Ranking)
 async function showRanking() {
-    document.getElementById('base').style.display = 'none';
-    document.getElementById('ranking').style.display = 'block';
+//    mainView.style.display = 'none';    // Ховаємо основний контент
+    rankingView.style.display = 'block'; // Показуємо рейтинг
 
     // Запит на отримання рейтингу
     try {

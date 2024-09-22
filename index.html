@@ -2,68 +2,84 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> <!-- Вимкнено зум -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Game Buildings</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div class="container">
-    <!-- Місце для імені користувача -->
+<!-- Верхня частина з ресурсами та іменем користувача -->
+<div id="resourcesBalance">
     <h2 id="userName">Loading...</h2>
+    <p>🍞 Food: <span id="food">0</span></p>
+    <p>🪵 Wood: <span id="wood">0</span></p>
+    <p>👷 Workers: <span id="totalWorkers">0</span></p>
+</div>
 
-    <!-- Контейнер для вмісту (гри або рейтингу) -->
-    <div id="content">
-        <!-- Гра (база) -->
-        <div id="base">
-            <div class="resources">
-                <div id="resources">
-                    <p>Wood: <span id="wood">0</span></p>
-                    <p>Food: <span id="food">0</span></p>
-                </div>
-                <div id="workers">
-                    <p>Total Workers: <span id="totalWorkers">0</span></p>
-                </div>
-            </div>
-
-            <div class="buildings">
-                <div class="building" id="palace">
-                    <h2>Palace - Level <span id="palaceLevel">1</span></h2>
-                    <button id="palaceUpgradeBtn" onclick="startUpgrade('palace')">Start Upgrade</button>
-                    <button id="palaceFinishUpgradeBtn" onclick="finishUpgrade('palace')">Finish Upgrade</button>
-                </div>
-
-                <div class="building" id="farm">
-                    <h2>Farm - Level <span id="farmLevel">1</span></h2>
-                    <button id="farmUpgradeBtn" onclick="startUpgrade('farm')">Start Upgrade</button>
-                    <button id="farmFinishUpgradeBtn" onclick="finishUpgrade('farm')">Finish Upgrade</button>
-                </div>
-
-                <div class="building" id="woodMine">
-                    <h2>Wood Mine - Level <span id="woodMineLevel">1</span></h2>
-                    <button id="woodMineUpgradeBtn" onclick="startUpgrade('woodMine')">Start Upgrade</button>
-                    <button id="woodMineFinishUpgradeBtn" onclick="finishUpgrade('woodMine')">Finish Upgrade</button>
-                </div>
-
-                <div class="building" id="workerHouse">
-                    <h2>Worker House - Level <span id="workerHouseLevel">1</span></h2>
-                    <button id="workerHouseUpgradeBtn" onclick="startUpgrade('workerHouse')">Start Upgrade</button>
-                    <button id="workerHouseFinishUpgradeBtn" onclick="finishUpgrade('workerHouse')">Finish Upgrade</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Рейтинг -->
-        <div id="ranking" style="display:none;">
-            <div id="rankingList"></div>
-        </div>
+<!-- Основний контент (Base) з зображеннями будівель -->
+<div id="mainView" class="view-grid">
+    <div id="palace" class="building">
+        <span class="level" id="palaceLevel">1</span>
+        <img src="images/palace.png" alt="Palace" class="buildingImage" onclick="openModal('palaceInfo')">
     </div>
-
-    <!-- Кнопки для перемикання між базою і рейтингом -->
-    <div class="buttons">
-        <button class="action-btn" onclick="showBase()">Base</button>
-        <button class="action-btn" onclick="showRanking()">Ranking</button>
+    <div id="workerHouse" class="building">
+        <span class="level" id="workerHouseLevel">1</span>
+        <img src="images/workerHouse.png" alt="Worker House" class="buildingImage" onclick="openModal('workerHouseInfo')">
     </div>
+    <div id="foodMine" class="building">
+        <span class="level" id="farmLevel">1</span>
+        <img src="images/foodMine.png" alt="Food Mine" class="buildingImage" onclick="openModal('foodMineInfo')">
+    </div>
+    <div id="woodMine" class="building">
+        <span class="level" id="woodMineLevel">1</span>
+        <img src="images/woodMine.png" alt="Wood Mine" class="buildingImage" onclick="openModal('woodMineInfo')">
+    </div>
+</div>
+
+<!-- Модальні вікна для кожної будівлі -->
+<div id="palaceInfo" class="extraInfo">
+    <button class="closeBtn" onclick="closeModal('palaceInfo')">&times;</button>
+    <img src="images/palace.png" alt="Palace" class="infoImage">
+    <div class="tooltip">Palace</div>
+    <button class="upgradeBtn" onclick="startUpgrade('palace')">Upgrade</button>
+    <button class="upgradeBtn" onclick="finishUpgrade('palace')">Finish Upgrade</button>
+</div>
+
+<div id="workerHouseInfo" class="extraInfo">
+    <button class="closeBtn" onclick="closeModal('workerHouseInfo')">&times;</button>
+    <img src="images/workerHouse.png" alt="Worker House" class="infoImage">
+    <div class="tooltip">Worker House</div>
+    <button class="upgradeBtn" onclick="startUpgrade('workerHouse')">Upgrade</button>
+    <button class="upgradeBtn" onclick="finishUpgrade('workerHouse')">Finish Upgrade</button>
+</div>
+
+<div id="foodMineInfo" class="extraInfo">
+    <button class="closeBtn" onclick="closeModal('foodMineInfo')">&times;</button>
+    <img src="images/foodMine.png" alt="Food Mine" class="infoImage">
+    <div class="tooltip">Farm</div>
+    <button class="upgradeBtn" onclick="startUpgrade('farm')">Upgrade</button>
+    <button class="upgradeBtn" onclick="finishUpgrade('farm')">Finish Upgrade</button>
+</div>
+
+<div id="woodMineInfo" class="extraInfo">
+    <button class="closeBtn" onclick="closeModal('woodMineInfo')">&times;</button>
+    <img src="images/woodMine.png" alt="Wood Mine" class="infoImage">
+    <div class="tooltip">Wood Mine</div>
+    <button class="upgradeBtn" onclick="startUpgrade('woodMine')">Upgrade</button>
+    <button class="upgradeBtn" onclick="finishUpgrade('woodMine')">Finish Upgrade</button>
+</div>
+
+<!-- Секція рейтингу (прихована) -->
+<div id="ranking" class="extraInfo">
+    <button class="closeBtn" onclick="closeModal('ranking')">&times;</button>
+    <h1>Ranking</h1>
+    <div id="rankingList" class="tooltip"></div>
+</div>
+
+<!-- Нижня частина з кнопками навігації -->
+<div id="navbar">
+    <button class="action-btn" onclick="showBase()">Base</button>
+    <button class="action-btn" onclick="showRanking()">Ranking</button>
 </div>
 
 <!-- Підключаємо Telegram Web Apps API -->

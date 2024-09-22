@@ -1,74 +1,175 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    color: #4CAF50;
-}
-
-.container {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    text-align: center;
-    color: #4CAF50;
-}
-
-h2 {
-    text-align: center;
-    color: #4CAF50;
-}
-
-p {
-    color: #4CAF50;
-}
-
-.resources, .buildings {
+    background-image: url('images/back.jpg');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    flex-wrap: wrap;
+    text-align: center;
+    color: #fff;
+}
+
+#resourcesBalance {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #4CAF50;
+    height: 8vh;
+    width: 100vw;
+    font-size: 2vh;
+    border-bottom: 1px solid white;
+    box-sizing: border-box;
+}
+
+#mainView {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(20, 1fr);
+    gap: 0;
+    justify-items: center;
+    align-items: center;
+    width: 100vw;
+    height: calc(100vh - 18vh); /* Віднімаємо висоту верхньої та нижньої плашок */
+    position: relative;
 }
 
 .building {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 5px;
-    flex: 1 1 45%;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: none;
+    box-shadow: none;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    overflow: visible;
 }
 
-.building h2 {
-    margin: 0;
-    color: #4CAF50;
+.buildingImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-.building button {
-    padding: 10px;
-    background-color: #4CAF50;
+.building .level {
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.3vh;
+    font-weight: bold;
     color: white;
-    border: none;
-    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 0.3em 0.6em;
+    border-radius: 5px;
+    pointer-events: none;
+    z-index: 10;
 }
 
-.buttons {
+/* Розміщення будівель у сітці */
+#palace {
+    grid-column: 4 / span 4;
+    grid-row: 9 / span 4;
+    transform: translate(-1%, 0%);
+}
+
+#workerHouse {
+    grid-column: 1 / span 2;
+    grid-row: 9 / span 2;
+    transform: translate(10%, 9%);
+}
+
+#foodMine {
+    grid-column: 3 / span 2;
+    grid-row: 11 / span 2;
+    transform: translate(37%, 29%);
+}
+
+#woodMine {
+    grid-column: 1 / span 2;
+    grid-row: 11 / span 2;
+    transform: translate(10%, 29%);
+}
+
+#navbar {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #000;
+    height: 10vh;
+    width: 100vw;
 }
 
-.action-btn {
+#navbar button {
     flex: 1;
-    padding: 15px;
+    height: 100%;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 2vh;
+    cursor: pointer;
+    border-radius: 0;
+    text-align: center;
+}
+
+/* Стиль модальних вікон */
+.extraInfo {
+    position: fixed;
+    top: 8vh; /* Відступ від панелі ресурсів */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 2vh 2vw;
+    border-radius: 0;
+    width: auto;
+    height: calc(100vh - 8vh); /* Враховуємо висоту панелі ресурсів */
+    z-index: 2000;
+    display: none;
+    overflow-y: auto;
+    color: white;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+    background: none;
+    border: none;
+    font-size: 3vh;
+    cursor: pointer;
+    color: white;
+    z-index: 2100;
+}
+
+.infoImage {
+    width: 50%;
+    height: auto;
+    margin: 10px auto;
+}
+
+.tooltip {
+    margin-top: 0vh;
+    font-size: 3vh;
+    color: #fff;
+}
+
+.upgradeBtn {
     background-color: #4CAF50;
     color: white;
     border: none;
+    padding: 10px 20px;
     cursor: pointer;
-    margin: 5px;
-    font-size: 16px;
+    margin-top: 10px;
+}
+
+.upgradeBtn:disabled {
+    background-color: #a9a9a9;
+    cursor: not-allowed;
 }
