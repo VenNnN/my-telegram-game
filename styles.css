@@ -161,6 +161,13 @@ body {
     color: #fff;
 }
 
+/* Стиль для тексту в списку рейтингу */
+.rankingText {
+    text-align: left; /* Вирівнювання тексту по лівому краю */
+    padding-left: 12%; /* Додаємо відступ зліва */
+    font-size: 2.5vh; /* Ви можете налаштувати цей розмір шрифту окремо для рейтингу */
+}
+
 .upgradeBtn {
     background-color: #4CAF50;
     color: white;
