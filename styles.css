@@ -13,6 +13,7 @@ body {
     justify-content: space-between;
     text-align: center;
     color: #fff;
+    overflow: hidden; /* Забороняємо прокручування сторінки */
 }
 
 #resourcesBalance {
