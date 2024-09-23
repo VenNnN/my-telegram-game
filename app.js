@@ -19,8 +19,8 @@ if (window.Telegram && window.Telegram.WebApp) {
         // Отримати початкові дані при завантаженні сторінки
         getInitialData();
     } else {
-        user_id = 1; // Зберігаємо user_id
-        username = 'bot1';
+        user_id = 2; // Зберігаємо user_id
+        username = 'bot2';
         document.getElementById("userName").textContent = `Hello, ${username}!`;
         getInitialData();
 //        console.error("User data is not available.");
@@ -140,6 +140,8 @@ const rankingView = document.getElementById('ranking');
 
 // Показ базової сторінки (Base)
 function showBase() {
+    resetActiveButtons();
+    document.getElementById('btnBase').classList.add('active');
     mainView.style.display = 'grid';   // Показуємо основний контент
     rankingView.style.display = 'none'; // Ховаємо рейтинг
 }
@@ -155,6 +157,8 @@ function closeModal(modalId) {
 
 // Показ сторінки рейтингу (Ranking)
 async function showRanking() {
+    resetActiveButtons();
+    document.getElementById('btnRanking').classList.add('active');
 //    mainView.style.display = 'none';    // Ховаємо основний контент
     rankingView.style.display = 'block'; // Показуємо рейтинг
 
@@ -182,4 +186,31 @@ async function showRanking() {
     } catch (error) {
         console.error("Error fetching ranking:", error);
     }
+}
+
+// Отримуємо всі кнопки навбару
+const navbarButtons = document.querySelectorAll('#navbar button');
+
+// Функція для зняття виділення з усіх кнопок
+function resetActiveButtons() {
+    navbarButtons.forEach(button => button.classList.remove('active'));
+}
+
+// Аналогічні функції для інших кнопок
+function showWorkerHouse() {
+    resetActiveButtons();
+    document.getElementById('btnWorkerHouse').classList.add('active');
+    // Додаємо логіку для Worker House
+}
+
+function showFoodMine() {
+    resetActiveButtons();
+    document.getElementById('btnFoodMine').classList.add('active');
+    // Додаємо логіку для Food Mine
+}
+
+function showWoodMine() {
+    resetActiveButtons();
+    document.getElementById('btnWoodMine').classList.add('active');
+    // Додаємо логіку для Wood Mine
 }

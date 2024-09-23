@@ -78,8 +78,21 @@
 
 <!-- Нижня частина з кнопками навігації -->
 <div id="navbar">
-    <button class="action-btn" onclick="showBase()">Base</button>
-    <button class="action-btn" onclick="showRanking()">Ranking</button>
+    <button class="action-btn" id="btnWoodMine" onclick="showWoodMine()">
+        <img src="images/woodMine.png" alt="Wood Mine" class="navbarIcon">
+    </button>
+    <button class="action-btn" id="btnWorkerHouse" onclick="showWorkerHouse()">
+        <img src="images/workerHouse.png" alt="Worker House" class="navbarIcon">
+    </button>
+    <button class="action-btn" id="btnBase" onclick="showBase()">
+        <img src="images/palace.png" alt="Base" class="navbarIcon">
+    </button>
+    <button class="action-btn" id="btnRanking" onclick="showRanking()">
+        <img src="images/barracks.png" alt="Ranking" class="navbarIcon">
+    </button>
+    <button class="action-btn" id="btnFoodMine" onclick="showFoodMine()">
+        <img src="images/foodMine.png" alt="Food Mine" class="navbarIcon">
+    </button>
 </div>
 
 <!-- Підключаємо Telegram Web Apps API -->
