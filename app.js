@@ -29,6 +29,29 @@ if (window.Telegram && window.Telegram.WebApp) {
     console.log("Telegram WebApp API is not available.");
 }
 
+// Показуємо екран завантаження
+function showLoadingScreen() {
+    document.getElementById('loadingScreen').style.display = 'flex';
+}
+
+// Ховаємо екран завантаження
+function hideLoadingScreen() {
+    document.getElementById('loadingScreen').style.display = 'none';
+}
+
+// Викликаємо екран завантаження при старті
+window.onload = function() {
+    showLoadingScreen();
+    showBase(); // Відразу показуємо базу при завантаженні
+
+    // Затримуємо завантаження на 1 секунду перед тим, як ховати екран завантаження
+    getInitialData().then(() => {
+        setTimeout(() => {
+            hideLoadingScreen();
+        }, 1000); // Затримка 1 секунда (1000 мілісекунд)
+    });
+};
+
 // Функція для отримання початкових даних
 async function getInitialData() {
     try {

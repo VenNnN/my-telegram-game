@@ -1,3 +1,60 @@
+/* Стиль для екрану завантаження */
+#loadingScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.96);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000; /* Вищий індекс для відображення поверх усіх інших елементів */
+    color: white;
+    font-size: 2vh;
+}
+
+/* Центрований вміст екрану завантаження */
+.loadingContent {
+    text-align: center;
+    font-weight: bold; /* Жирний текст */
+    font-size: 1.5em; /* Більший розмір тексту */
+    padding: 0 10%; /* Відступи з правого та лівого краю */
+    color: #fff; /* Колір тексту */
+}
+
+/* Стиль для контейнера спінера та тексту Loading */
+.loaderContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Проміжок між спінером і текстом */
+    margin-top: 20px; /* Відступ зверху для відокремлення від тексту */
+}
+
+/* Стиль для анімації завантаження (спінер) */
+.loader {
+    border: 4px solid #f3f3f3; /* Світлий колір фону */
+    border-top: 4px solid #000000; /* Колір активної частини */
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 1s linear infinite; /* Анімація */
+}
+
+/* Текст біля спінера */
+.loadingText {
+    font-size: 1em; /* Розмір тексту для Loading */
+    font-weight: bold; /* Жирний текст */
+    color: #fff; /* Колір тексту */
+}
+
+/* Анімація для спінера */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 body {
     font-family: Arial, sans-serif;
     background-image: url('images/back.jpg');
