@@ -236,16 +236,31 @@ body {
     font-size: 2.5vh; /* Ви можете налаштувати цей розмір шрифту окремо для рейтингу */
 }
 
-.upgradeBtn {
-    background-color: #4CAF50;
+.upgradeBtn, .finishUpgradeBtn, .upgradeTimer {
+    background-color: #4CAF50; /* Основний колір для кнопок */
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 0; /* Прибираємо зайві відступи */
     cursor: pointer;
-    margin-top: 10px;
+    margin: 10px auto; /* Центрування по горизонталі */
+    display: block; /* Робить елемент блоковим */
+    text-align: center; /* Вирівнює текст по центру */
+    width: 30vh; /* Фіксована ширина */
+    height: 5vh; /* Фіксована висота */
+    line-height: 5vh; /* Вирівнювання тексту по вертикалі */
+    font-size: 2vh; /* Фіксований розмір шрифту */
+    border-radius: 5px; /* Округлені кути */
 }
 
-.upgradeBtn:disabled {
+.upgradeBtn:disabled, .finishUpgradeBtn:disabled {
     background-color: #a9a9a9;
     cursor: not-allowed;
+}
+
+.upgradeTimer {
+    background-color: #a9a9a9; /* Сірий колір для таймера */
+    color: #FFD700; /* Золотий текст для таймера */
+    font-weight: bold;
+    line-height: 5vh; /* Вирівнювання тексту по вертикалі */
+    font-size: 2vh; /* Фіксований розмір шрифту для таймера */
 }

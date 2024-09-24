@@ -52,32 +52,57 @@
     <button class="closeBtn" onclick="closeModal('palaceInfo')">&times;</button>
     <img src="images/palace.png" alt="Palace" class="infoImage">
     <div class="tooltip">Palace</div>
+    <!-- Додана інформація про ресурси та тривалість -->
+    <div class="upgradeDetails">
+        <p>🪵 Wood Cost: <span id="palaceWoodCost">0</span></p>
+        <p>🍞 Food Cost: <span id="palaceFoodCost">0</span></p>
+        <p>⏳ Duration: <span id="palaceUpgradeDuration">0</span> sec</p>
+    </div>
     <button class="upgradeBtn" onclick="startUpgrade('palace')">Upgrade</button>
-    <button class="upgradeBtn" onclick="finishUpgrade('palace')">Finish Upgrade</button>
+    <button class="finishUpgradeBtn" onclick="finishUpgrade('palace')" style="display:none;">Finish Upgrade</button>
+    <div class="upgradeTimer" style="display:none;"></div>
 </div>
 
 <div id="workerHouseInfo" class="extraInfo">
     <button class="closeBtn" onclick="closeModal('workerHouseInfo')">&times;</button>
     <img src="images/workerHouse.png" alt="Worker House" class="infoImage">
     <div class="tooltip">Worker House</div>
+    <div class="upgradeDetails">
+        <p>🪵 Wood Cost: <span id="workerHouseWoodCost">0</span></p>
+        <p>🍞 Food Cost: <span id="workerHouseFoodCost">0</span></p>
+        <p>⏳ Duration: <span id="workerHouseUpgradeDuration">0</span> sec</p>
+    </div>
     <button class="upgradeBtn" onclick="startUpgrade('workerHouse')">Upgrade</button>
-    <button class="upgradeBtn" onclick="finishUpgrade('workerHouse')">Finish Upgrade</button>
+    <button class="finishUpgradeBtn" onclick="finishUpgrade('workerHouse')" style="display:none;">Finish Upgrade</button>
+    <div class="upgradeTimer" style="display:none;"></div>
 </div>
 
 <div id="foodMineInfo" class="extraInfo">
     <button class="closeBtn" onclick="closeModal('foodMineInfo')">&times;</button>
     <img src="images/foodMine.png" alt="Food Mine" class="infoImage">
     <div class="tooltip">Farm</div>
+    <div class="upgradeDetails">
+        <p>🪵 Wood Cost: <span id="foodMineWoodCost">0</span></p>
+        <p>🍞 Food Cost: <span id="foodMineFoodCost">0</span></p>
+        <p>⏳ Duration: <span id="foodMineUpgradeDuration">0</span> sec</p>
+    </div>
     <button class="upgradeBtn" onclick="startUpgrade('farm')">Upgrade</button>
-    <button class="upgradeBtn" onclick="finishUpgrade('farm')">Finish Upgrade</button>
+    <button class="finishUpgradeBtn" onclick="finishUpgrade('farm')" style="display:none;">Finish Upgrade</button>
+    <div class="upgradeTimer" style="display:none;"></div>
 </div>
 
 <div id="woodMineInfo" class="extraInfo">
     <button class="closeBtn" onclick="closeModal('woodMineInfo')">&times;</button>
     <img src="images/woodMine.png" alt="Wood Mine" class="infoImage">
     <div class="tooltip">Wood Mine</div>
+    <div class="upgradeDetails">
+        <p>🪵 Wood Cost: <span id="woodMineWoodCost">0</span></p>
+        <p>🍞 Food Cost: <span id="woodMineFoodCost">0</span></p>
+        <p>⏳ Duration: <span id="woodMineUpgradeDuration">0</span> sec</p>
+    </div>
     <button class="upgradeBtn" onclick="startUpgrade('woodMine')">Upgrade</button>
-    <button class="upgradeBtn" onclick="finishUpgrade('woodMine')">Finish Upgrade</button>
+    <button class="finishUpgradeBtn" onclick="finishUpgrade('woodMine')" style="display:none;">Finish Upgrade</button>
+    <div class="upgradeTimer" style="display:none;"></div>
 </div>
 
 <!-- Секція рейтингу (прихована) -->

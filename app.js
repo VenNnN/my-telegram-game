@@ -19,8 +19,8 @@ if (window.Telegram && window.Telegram.WebApp) {
         // Отримати початкові дані при завантаженні сторінки
         getInitialData();
     } else {
-        user_id = 2; // Зберігаємо user_id
-        username = 'bot2';
+        user_id = 6; // Зберігаємо user_id
+        username = 'bot6';
         document.getElementById("userName").textContent = `Hello, ${username}!`;
         getInitialData();
 //        console.error("User data is not available.");
@@ -83,6 +83,93 @@ function updateUI(data) {
     document.getElementById('farmLevel').textContent = data.food_farm_level;
     document.getElementById('woodMineLevel').textContent = data.wood_mine_level;
     document.getElementById('workerHouseLevel').textContent = data.worker_house_level;
+
+    isAnyUpgradePending = data.palace_upgrade_pending || data.worker_house_upgrade_pending ||
+                          data.food_farm_upgrade_pending || data.wood_mine_upgrade_pending;
+    updateBuildingState('palace', data.palace_upgrade_pending, data.palace_upgrade_start_time,
+                        data.palace_upgrade_duration, isAnyUpgradePending, data.palace_upgrade_cost_wood,
+                        data.palace_upgrade_cost_food);
+    updateBuildingState('workerHouse', data.worker_house_upgrade_pending, data.worker_house_upgrade_start_time,
+                        data.worker_house_upgrade_duration, isAnyUpgradePending, data.worker_house_upgrade_cost_wood,
+                        data.worker_house_upgrade_cost_food);
+    updateBuildingState('foodMine', data.food_farm_upgrade_pending, data.food_farm_upgrade_start_time,
+                        data.food_farm_upgrade_duration, isAnyUpgradePending, data.food_farm_upgrade_cost_wood,
+                        data.food_farm_upgrade_cost_food);
+    updateBuildingState('woodMine', data.wood_mine_upgrade_pending, data.wood_mine_upgrade_start_time,
+                        data.wood_mine_upgrade_duration, isAnyUpgradePending, data.wood_mine_upgrade_cost_wood,
+                        data.wood_mine_upgrade_cost_food);
+}
+
+// Функція для оновлення стану будівлі
+function updateBuildingState(building, isUpgradePending, startTime, duration, isAnyUpgradePending, woodCost, foodCost) {
+    // Оновлення вартості та тривалості апгрейду
+    document.getElementById(`${building}WoodCost`).textContent = woodCost;
+    document.getElementById(`${building}FoodCost`).textContent = foodCost;
+    document.getElementById(`${building}UpgradeDuration`).textContent = duration;
+
+    const upgradeBtn = document.querySelector(`#${building}Info .upgradeBtn`);
+    const finishBtn = document.querySelector(`#${building}Info .finishUpgradeBtn`);
+    const timerElement = document.querySelector(`#${building}Info .upgradeTimer`);
+
+    if (isAnyUpgradePending && !isUpgradePending) {
+        // Якщо інша будівля в процесі апгрейду - вимикаємо кнопки
+        upgradeBtn.disabled = true;
+        upgradeBtn.classList.add('disabled');
+        timerElement.style.display = 'none';
+        return;
+    } else {
+        // Якщо апгрейд не йде для цієї будівлі
+        upgradeBtn.disabled = false
+        upgradeBtn.classList.remove('disabled');
+    }
+
+    if (!isUpgradePending) {
+        // Якщо апгрейд не йде - показати кнопку "Upgrade"
+        upgradeBtn.style.display = 'block';
+        finishBtn.style.display = 'none';
+        timerElement.style.display = 'none';
+    } else {
+        const cleanedStartTime = startTime.split('.')[0] + 'Z';  // Додаємо 'Z' для позначення UTC
+
+        const now = Date.now();
+        const upgradeEndTime = new Date(cleanedStartTime).getTime() + (duration * 1000);
+        const timeRemaining = upgradeEndTime - now;
+        if (timeRemaining > 0) {
+            // Показуємо таймер
+            upgradeBtn.style.display = 'none';
+            finishBtn.style.display = 'none';
+            timerElement.style.display = 'block';
+            startUpgradeTimer(timerElement, timeRemaining);
+        } else {
+            // Якщо апгрейд завершився - показати кнопку "Finish Upgrade"
+            upgradeBtn.style.display = 'none';
+            finishBtn.style.display = 'block';
+            timerElement.style.display = 'none';
+        }
+    }
+}
+
+// Функція для запуску таймера
+function startUpgradeTimer(timerElement, timeRemaining) {
+    const minutes = Math.floor(timeRemaining / 60000);
+    const seconds = Math.floor((timeRemaining % 60000) / 1000) + 1;
+    timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+    const intervalId = setInterval(() => {
+        const minutes = Math.floor(timeRemaining / 60000);
+        const seconds = Math.floor((timeRemaining % 60000) / 1000);
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        if (timeRemaining <= 0) {
+            clearInterval(intervalId);
+            timerElement.style.display = 'none';
+            // Показати кнопку "Finish Upgrade" після завершення таймера
+            const finishBtn = timerElement.parentElement.querySelector('.finishUpgradeBtn');
+            finishBtn.style.display = 'block';
+        }
+
+        timeRemaining -= 1000;
+    }, 1000);
 }
 
 // Функція для запуску апгрейду
@@ -110,7 +197,7 @@ async function startUpgrade(building) {
 
         if (response.ok) {
             const data = await response.json();
-            alert(`${building.charAt(0).toUpperCase() + building.slice(1)} upgrade started!`);
+            //alert(`${building.charAt(0).toUpperCase() + building.slice(1)} upgrade started!`);
             getInitialData(); // Оновлюємо дані після апгрейду
         } else {
             const error = await response.json();
@@ -146,7 +233,7 @@ async function finishUpgrade(building) {
 
         if (response.ok) {
             const data = await response.json();
-            alert(`${building.charAt(0).toUpperCase() + building.slice(1)} upgrade finished!`);
+            //alert(`${building.charAt(0).toUpperCase() + building.slice(1)} upgrade finished!`);
             getInitialData(); // Оновлюємо дані після завершення апгрейду
         } else {
             const error = await response.json();
