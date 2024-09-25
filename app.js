@@ -86,6 +86,13 @@ async function getInitialData() {
     }
 }
 
+// Функція для оновлення кількості працівників на слайдері
+function updateWorkersCount(building) {
+    const slider = document.getElementById(`${building}WorkersSlider`);
+    const countDisplay = document.getElementById(`${building}WorkersCount`);
+    countDisplay.textContent = slider.value;
+}
+
 // Функція для оновлення даних на UI
 function updateUI(data) {
     document.getElementById('wood').textContent = data.wood_amount;
@@ -115,6 +122,8 @@ function updateUI(data) {
                         configData['woodMineUpgradeTimes'][data.wood_mine_level-1], isAnyUpgradePending,
                         configData['woodMineCostsWood'][data.wood_mine_level-1],
                         configData['woodMineCostsFood'][data.wood_mine_level-1]);
+
+    updateMinesState(data);
 }
 
 // Функція для оновлення стану будівлі
@@ -163,6 +172,140 @@ function updateBuildingState(building, isUpgradePending, startTime, duration, is
             finishBtn.style.display = 'block';
             timerElement.style.display = 'none';
         }
+    }
+}
+
+// Оновлення стану шахт
+function updateMinesState(data) {
+    // Оновлюємо слайдери для ферми та лісопилки
+    const availableWorkers = data.total_workers - data.workers_on_wood - data.workers_on_food;
+
+    // Оновлюємо дані для ферми
+    document.getElementById('foodMineTimePerWorker').textContent = configData.miningTime;
+    document.getElementById('foodMineResourcePerWorker').textContent = configData.resourceGain + data.food_farm_level;
+    document.getElementById('foodMineWorkersSlider').max = availableWorkers;
+
+    if(data.food_farm_upgrade_pending || !availableWorkers){
+        document.querySelector(`#foodMineInfo .foodStartBtn`).disabled = true;
+        document.querySelector(`#foodMineInfo .foodStartBtn`).classList.add('disabled');
+    }
+    else{
+        document.querySelector(`#foodMineInfo .foodStartBtn`).disabled = false;
+        document.querySelector(`#foodMineInfo .foodStartBtn`).classList.remove('disabled');
+    }
+
+    if (data.food_extraction_in_progress) {
+        // Якщо йде добич їжі
+        startFoodExtractionTimer(data.food_extraction_start_time, configData.miningTime, data.workers_on_food);
+        document.querySelector(`#foodMineInfo .foodStartBtn`).style.display = 'none';
+    }
+    else{
+        document.querySelector(`#foodMineInfo .foodFinishBtn`).style.display = 'none';
+        document.querySelector(`#foodMineInfo .foodStartBtn`).style.display = 'block';
+    }
+
+    // Оновлюємо дані для лісопилки
+    document.getElementById('woodMineTimePerWorker').textContent = configData.miningTime;
+    document.getElementById('woodMineResourcePerWorker').textContent = configData.resourceGain + data.wood_mine_level;
+    document.getElementById('woodMineWorkersSlider').max = availableWorkers;
+
+    if(data.wood_mine_upgrade_pending || !availableWorkers){
+        document.querySelector(`#woodMineInfo .woodStartBtn`).disabled = true;
+        document.querySelector(`#woodMineInfo .woodStartBtn`).classList.add('disabled');
+    }
+    else{
+        document.querySelector(`#woodMineInfo .woodStartBtn`).disabled = false;
+        document.querySelector(`#woodMineInfo .woodStartBtn`).classList.remove('disabled');
+    }
+
+    if (data.wood_extraction_in_progress) {
+        // Якщо йде добич дерева
+        startWoodExtractionTimer(data.wood_extraction_start_time, configData.miningTime, data.workers_on_wood);
+        document.querySelector(`#woodMineInfo .woodStartBtn`).style.display = 'none';
+    }
+    else{
+        document.querySelector(`#woodMineInfo .woodFinishBtn`).style.display = 'none';
+        document.querySelector(`#woodMineInfo .woodStartBtn`).style.display = 'block';
+    }
+}
+
+// Запуск таймера видобутку
+function startFoodExtractionTimer(startTime, duration, workers) {
+    const cleanedStartTime = startTime.split('.')[0] + 'Z';  // Додаємо 'Z' для позначення UTC
+
+    const now = Date.now();
+    const extractionEndTime = new Date(cleanedStartTime).getTime() + (duration * workers * 1000);
+    let timeRemaining = extractionEndTime - now;
+
+    const timerElement = document.querySelector(`#foodMineInfo .foodExtractionTimer`);
+    const extractionButton = document.querySelector(`#foodMineInfo .foodStartBtn`);
+    const extractionFinishButton = document.querySelector(`#foodMineInfo .foodFinishBtn`);
+
+    if (timeRemaining > 0) {
+        timerElement.style.display = 'block';
+        extractionButton.style.display = 'none';
+        extractionFinishButton.style.display = 'none';
+
+        const minutes = Math.floor(timeRemaining / 60000);
+        const seconds = Math.floor((timeRemaining % 60000) / 1000)+1;
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        const intervalId = setInterval(() => {
+            const minutes = Math.floor(timeRemaining / 60000);
+            const seconds = Math.floor((timeRemaining % 60000) / 1000);
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeRemaining <= 0) {
+                clearInterval(intervalId);
+                timerElement.style.display = 'none';
+                extractionFinishButton.style.display = 'block';
+            }
+
+            timeRemaining -= 1000;
+        }, 1000);
+    }
+    else {
+        extractionFinishButton.style.display = 'block';
+    }
+}
+
+// Запуск таймера видобутку
+function startWoodExtractionTimer(startTime, duration, workers) {
+    const cleanedStartTime = startTime.split('.')[0] + 'Z';  // Додаємо 'Z' для позначення UTC
+
+    const now = Date.now();
+    const extractionEndTime = new Date(cleanedStartTime).getTime() + (duration * workers * 1000);
+    let timeRemaining = extractionEndTime - now;
+
+    const timerElement = document.querySelector(`#woodMineInfo .woodExtractionTimer`);
+    const extractionButton = document.querySelector(`#woodMineInfo .woodStartBtn`);
+    const extractionFinishButton = document.querySelector(`#woodMineInfo .woodFinishBtn`);
+
+    if (timeRemaining > 0) {
+        timerElement.style.display = 'block';
+        extractionButton.style.display = 'none';
+        extractionFinishButton.style.display = 'none';
+
+        const minutes = Math.floor(timeRemaining / 60000);
+        const seconds = Math.floor((timeRemaining % 60000) / 1000)+1;
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        const intervalId = setInterval(() => {
+            const minutes = Math.floor(timeRemaining / 60000);
+            const seconds = Math.floor((timeRemaining % 60000) / 1000);
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeRemaining <= 0) {
+                clearInterval(intervalId);
+                timerElement.style.display = 'none';
+                extractionFinishButton.style.display = 'block';
+            }
+
+            timeRemaining -= 1000;
+        }, 1000);
+    }
+    else {
+        extractionFinishButton.style.display = 'block';
     }
 }
 
@@ -255,6 +398,66 @@ async function finishUpgrade(building) {
         } else {
             const error = await response.json();
             alert(`Error: ${error.detail}`);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+// Функція для запуску видобутку ресурсу
+async function startExtraction(resource, workers) {
+    let endpoint = '';
+    switch (resource) {
+        case 'food':
+            endpoint = `/users/${user_id}/start_food_extraction/?workers_on_food=${workers}`;
+            break;
+        case 'wood':
+            endpoint = `/users/${user_id}/start_wood_extraction/?workers_on_wood=${workers}`;
+            break;
+    }
+
+    try {
+        const response = await fetch(`${apiUrl}${endpoint}`, {
+            method: 'PUT',
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+         //   alert(`${workers} workers started ${resource} extraction!`);
+            getInitialData(); // Оновлюємо дані після старту видобутку
+        } else {
+            const error = await response.json();
+          //  alert(`Error: ${error.detail}`);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+// Функція для завершення видобутку ресурсу
+async function finishExtraction(resource) {
+    let endpoint = '';
+    switch (resource) {
+        case 'food':
+            endpoint = `/users/${user_id}/finish_food_extraction/`;
+            break;
+        case 'wood':
+            endpoint = `/users/${user_id}/finish_wood_extraction/`;
+            break;
+    }
+
+    try {
+        const response = await fetch(`${apiUrl}${endpoint}`, {
+            method: 'PUT',
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+          //  alert(`${resource.charAt(0).toUpperCase() + resource.slice(1)} extraction finished! Gained: ${data.total_food_gained || data.total_wood_gained}`);
+            getInitialData(); // Оновлюємо дані після завершення видобутку
+        } else {
+            const error = await response.json();
+          //  alert(`Error: ${error.detail}`);
         }
     } catch (error) {
         console.error("Error:", error);

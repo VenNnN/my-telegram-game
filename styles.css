@@ -218,7 +218,7 @@ body {
 }
 
 .infoImage {
-    width: 50%;
+    width: 40%;
     height: auto;
     margin: 10px auto;
 }
@@ -236,7 +236,15 @@ body {
     font-size: 2.5vh; /* Ви можете налаштувати цей розмір шрифту окремо для рейтингу */
 }
 
-.upgradeBtn, .finishUpgradeBtn, .upgradeTimer {
+.upgradeBtn,
+.finishUpgradeBtn,
+.upgradeTimer,
+.foodStartBtn,
+.foodFinishBtn,
+.foodExtractionTimer,
+.woodStartBtn,
+.woodFinishBtn,
+.woodExtractionTimer {
     background-color: #4CAF50; /* Основний колір для кнопок */
     color: white;
     border: none;
@@ -252,12 +260,17 @@ body {
     border-radius: 5px; /* Округлені кути */
 }
 
-.upgradeBtn:disabled, .finishUpgradeBtn:disabled {
+.upgradeBtn:disabled,
+.finishUpgradeBtn:disabled,
+.foodStartBtn:disabled,
+.foodFinishBtn:disabled,
+.woodStartBtn:disabled,
+.woodFinishBtn:disabled{
     background-color: #a9a9a9;
     cursor: not-allowed;
 }
 
-.upgradeTimer {
+.upgradeTimer, .foodExtractionTimer, .woodExtractionTimer {
     background-color: #a9a9a9; /* Сірий колір для таймера */
     color: #FFD700; /* Золотий текст для таймера */
     font-weight: bold;
