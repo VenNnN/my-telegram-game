@@ -1,9 +1,22 @@
 const apiUrl = 'https://a572-91-210-250-82.ngrok-free.app'; // Зміни на свою адресу, якщо треба
 let user_id, username; // Тепер user_id та username будуть отримуватися з Telegram
 
-// Перевіряємо, чи API доступний
-if (window.Telegram && window.Telegram.WebApp) {
-    // Ініціалізуємо Telegram WebApp API
+let configData = null; // Змінна, яка буде доступна у всьому файлі
+
+// Функція для завантаження конфігурації
+function loadConfig() {
+    return fetch('config.json') // Вкажіть правильний шлях до файлу
+      .then(response => response.json())
+      .then(data => {
+        configData = data; // Зберігаємо дані у глобальній змінній
+        console.log('Config loaded:', configData);
+      })
+      .catch(error => {
+        console.error('Error fetching the config file:', error);
+      });
+}
+
+function loadUserData(){
     let tg = window.Telegram.WebApp;
     tg.ready();  // Сигналізуємо, що додаток готовий до роботи
 
@@ -25,9 +38,10 @@ if (window.Telegram && window.Telegram.WebApp) {
         getInitialData();
 //        console.error("User data is not available.");
     }
-} else {
-    console.log("Telegram WebApp API is not available.");
 }
+
+loadUserData();
+loadConfig();
 
 // Показуємо екран завантаження
 function showLoadingScreen() {
@@ -48,7 +62,7 @@ window.onload = function() {
     getInitialData().then(() => {
         setTimeout(() => {
             hideLoadingScreen();
-        }, 1000); // Затримка 1 секунда (1000 мілісекунд)
+        }, 200); // Затримка 1 секунда (1000 мілісекунд)
     });
 };
 
@@ -60,7 +74,6 @@ async function getInitialData() {
                 'ngrok-skip-browser-warning': 'true'  // Додаємо цей заголовок
             }
         });
-
         if (response.ok) {
             const data = await response.json();
             console.log(data); // Перевіримо отримані дані
@@ -87,17 +100,21 @@ function updateUI(data) {
     isAnyUpgradePending = data.palace_upgrade_pending || data.worker_house_upgrade_pending ||
                           data.food_farm_upgrade_pending || data.wood_mine_upgrade_pending;
     updateBuildingState('palace', data.palace_upgrade_pending, data.palace_upgrade_start_time,
-                        data.palace_upgrade_duration, isAnyUpgradePending, data.palace_upgrade_cost_wood,
-                        data.palace_upgrade_cost_food);
+                        configData['palaceUpgradeTimes'][data.palace_level-1], isAnyUpgradePending,
+                        configData['palaceCostsWood'][data.palace_level-1],
+                        configData['palaceCostsFood'][data.palace_level-1]);
     updateBuildingState('workerHouse', data.worker_house_upgrade_pending, data.worker_house_upgrade_start_time,
-                        data.worker_house_upgrade_duration, isAnyUpgradePending, data.worker_house_upgrade_cost_wood,
-                        data.worker_house_upgrade_cost_food);
+                        configData['workerHouseUpgradeTimes'][data.worker_house_level-1], isAnyUpgradePending,
+                        configData['workerHouseCostsWood'][data.worker_house_level-1],
+                        configData['workerHouseCostsFood'][data.worker_house_level-1]);
     updateBuildingState('foodMine', data.food_farm_upgrade_pending, data.food_farm_upgrade_start_time,
-                        data.food_farm_upgrade_duration, isAnyUpgradePending, data.food_farm_upgrade_cost_wood,
-                        data.food_farm_upgrade_cost_food);
+                        configData['foodFarmUpgradeTimes'][data.food_farm_level-1], isAnyUpgradePending,
+                        configData['foodFarmCostsWood'][data.food_farm_level-1],
+                        configData['foodFarmCostsFood'][data.food_farm_level-1]);
     updateBuildingState('woodMine', data.wood_mine_upgrade_pending, data.wood_mine_upgrade_start_time,
-                        data.wood_mine_upgrade_duration, isAnyUpgradePending, data.wood_mine_upgrade_cost_wood,
-                        data.wood_mine_upgrade_cost_food);
+                        configData['woodMineUpgradeTimes'][data.wood_mine_level-1], isAnyUpgradePending,
+                        configData['woodMineCostsWood'][data.wood_mine_level-1],
+                        configData['woodMineCostsFood'][data.wood_mine_level-1]);
 }
 
 // Функція для оновлення стану будівлі
