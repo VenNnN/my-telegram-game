@@ -427,8 +427,8 @@ function startFoodExtractionTimer(startTime, duration, workers) {
         extractionButton.style.display = 'none';
         extractionFinishButton.style.display = 'none';
 
-        const minutes = Math.floor(timeRemaining / 60000);
-        const seconds = Math.floor((timeRemaining % 60000) / 1000)+1;
+        const minutes = Math.floor((timeRemaining+1000) / 60000);
+        const seconds = Math.floor(((timeRemaining+1000) % 60000) / 1000);
         timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
         const intervalId = setInterval(() => {
@@ -467,8 +467,8 @@ function startWoodExtractionTimer(startTime, duration, workers) {
         extractionButton.style.display = 'none';
         extractionFinishButton.style.display = 'none';
 
-        const minutes = Math.floor(timeRemaining / 60000);
-        const seconds = Math.floor((timeRemaining % 60000) / 1000)+1;
+        const minutes = Math.floor((timeRemaining+1000) / 60000);
+        const seconds = Math.floor(((timeRemaining+1000) % 60000) / 1000);
         timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
         const intervalId = setInterval(() => {
@@ -492,8 +492,8 @@ function startWoodExtractionTimer(startTime, duration, workers) {
 
 // Функція для запуску таймера
 function startUpgradeTimer(timerElement, timeRemaining) {
-    const minutes = Math.floor(timeRemaining / 60000);
-    const seconds = Math.floor((timeRemaining % 60000) / 1000) + 1;
+    const minutes = Math.floor((timeRemaining+1000) / 60000);
+    const seconds = Math.floor(((timeRemaining+1000) % 60000) / 1000);
     timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
     const intervalId = setInterval(() => {
