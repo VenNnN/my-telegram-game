@@ -77,7 +77,7 @@ async function getInitialData() {
         if (response.ok) {
             const data = await response.json();
             console.log(data); // Перевіримо отримані дані
-            updateUI(data); // Оновлюємо інтерфейс користувача
+            updateUI(data, 'all', ''); // Оновлюємо інтерфейс користувача
         } else {
             console.error("Failed to fetch user data");
         }
@@ -94,7 +94,7 @@ function updateWorkersCount(building) {
 }
 
 // Функція для оновлення даних на UI
-function updateUI(data) {
+function updateUI(data, trigger, building) {
     document.getElementById('wood').textContent = data.wood_amount;
     document.getElementById('food').textContent = data.food_amount;
     document.getElementById('totalWorkers').textContent = data.total_workers;
@@ -104,30 +104,233 @@ function updateUI(data) {
     document.getElementById('woodMineLevel').textContent = data.wood_mine_level;
     document.getElementById('workerHouseLevel').textContent = data.worker_house_level;
 
+    updateStartButtonState(data);
+
+    if (trigger == 'all'){
+        updateBuildingState('palace', data.palace_upgrade_pending, data.palace_upgrade_start_time,
+                            configData['palaceUpgradeTimes'][data.palace_level-1],
+                            configData['palaceCostsWood'][data.palace_level-1],
+                            configData['palaceCostsFood'][data.palace_level-1]);
+        updateBuildingState('workerHouse', data.worker_house_upgrade_pending, data.worker_house_upgrade_start_time,
+                            configData['workerHouseUpgradeTimes'][data.worker_house_level-1],
+                            configData['workerHouseCostsWood'][data.worker_house_level-1],
+                            configData['workerHouseCostsFood'][data.worker_house_level-1]);
+        updateBuildingState('foodMine', data.food_farm_upgrade_pending, data.food_farm_upgrade_start_time,
+                            configData['foodFarmUpgradeTimes'][data.food_farm_level-1],
+                            configData['foodFarmCostsWood'][data.food_farm_level-1],
+                            configData['foodFarmCostsFood'][data.food_farm_level-1]);
+        updateBuildingState('woodMine', data.wood_mine_upgrade_pending, data.wood_mine_upgrade_start_time,
+                            configData['woodMineUpgradeTimes'][data.wood_mine_level-1],
+                            configData['woodMineCostsWood'][data.wood_mine_level-1],
+                            configData['woodMineCostsFood'][data.wood_mine_level-1]);
+
+        updateFoodMinesState(data);
+        updateWoodMinesState(data);
+    }
+    else{
+        if (trigger == 'upgrade'){
+            if (building == 'palace'){
+                updateBuildingState('palace', data.palace_upgrade_pending, data.palace_upgrade_start_time,
+                            configData['palaceUpgradeTimes'][data.palace_level-1],
+                            configData['palaceCostsWood'][data.palace_level-1],
+                            configData['palaceCostsFood'][data.palace_level-1]);
+            }
+            if (building == 'workerHouse'){
+                updateBuildingState('workerHouse', data.worker_house_upgrade_pending, data.worker_house_upgrade_start_time,
+                            configData['workerHouseUpgradeTimes'][data.worker_house_level-1],
+                            configData['workerHouseCostsWood'][data.worker_house_level-1],
+                            configData['workerHouseCostsFood'][data.worker_house_level-1]);
+            }
+            if (building == 'farm'){
+                updateBuildingState('foodMine', data.food_farm_upgrade_pending, data.food_farm_upgrade_start_time,
+                            configData['foodFarmUpgradeTimes'][data.food_farm_level-1],
+                            configData['foodFarmCostsWood'][data.food_farm_level-1],
+                            configData['foodFarmCostsFood'][data.food_farm_level-1]);
+            }
+            if (building == 'woodMine'){
+                updateBuildingState('woodMine', data.wood_mine_upgrade_pending, data.wood_mine_upgrade_start_time,
+                            configData['woodMineUpgradeTimes'][data.wood_mine_level-1],
+                            configData['woodMineCostsWood'][data.wood_mine_level-1],
+                            configData['woodMineCostsFood'][data.wood_mine_level-1]);
+            }
+        }
+        else {
+            if (trigger == 'mine'){
+                if (building == 'food'){
+                    updateFoodMinesState(data);
+                }
+                if (building == 'wood'){
+                    updateWoodMinesState(data);
+                }
+            }
+        }
+    }
+}
+
+// Функція для оновлення стану всіх кнопок старт_щось
+function updateStartButtonState(data){
+    // Чи йде якийсь апгрейд
     isAnyUpgradePending = data.palace_upgrade_pending || data.worker_house_upgrade_pending ||
                           data.food_farm_upgrade_pending || data.wood_mine_upgrade_pending;
-    updateBuildingState('palace', data.palace_upgrade_pending, data.palace_upgrade_start_time,
-                        configData['palaceUpgradeTimes'][data.palace_level-1], isAnyUpgradePending,
-                        configData['palaceCostsWood'][data.palace_level-1],
-                        configData['palaceCostsFood'][data.palace_level-1]);
-    updateBuildingState('workerHouse', data.worker_house_upgrade_pending, data.worker_house_upgrade_start_time,
-                        configData['workerHouseUpgradeTimes'][data.worker_house_level-1], isAnyUpgradePending,
-                        configData['workerHouseCostsWood'][data.worker_house_level-1],
-                        configData['workerHouseCostsFood'][data.worker_house_level-1]);
-    updateBuildingState('foodMine', data.food_farm_upgrade_pending, data.food_farm_upgrade_start_time,
-                        configData['foodFarmUpgradeTimes'][data.food_farm_level-1], isAnyUpgradePending,
-                        configData['foodFarmCostsWood'][data.food_farm_level-1],
-                        configData['foodFarmCostsFood'][data.food_farm_level-1]);
-    updateBuildingState('woodMine', data.wood_mine_upgrade_pending, data.wood_mine_upgrade_start_time,
-                        configData['woodMineUpgradeTimes'][data.wood_mine_level-1], isAnyUpgradePending,
-                        configData['woodMineCostsWood'][data.wood_mine_level-1],
-                        configData['woodMineCostsFood'][data.wood_mine_level-1]);
 
-    updateMinesState(data);
+    // Кнопка старт апгрейд в палаці
+    if(isAnyUpgradePending || (data.wood_amount < configData['palaceCostsWood'][data.palace_level-1] ||
+        data.food_amount < configData['palaceCostsFood'][data.palace_level-1])){
+
+        if(isAnyUpgradePending){
+            document.querySelector(`#palaceInfo .upgradeBtn`).textContent = 'Another upgrade in progress..';
+        }
+        else{
+            document.querySelector(`#palaceInfo .upgradeBtn`).textContent = 'Insufficient resources..';
+        }
+        document.querySelector(`#palaceInfo .upgradeBtn`).disabled = true;
+        document.querySelector(`#palaceInfo .upgradeBtn`).classList.add('disabled');
+    }
+    else{
+        document.querySelector(`#palaceInfo .upgradeBtn`).textContent = 'Upgrade';
+
+        document.querySelector(`#palaceInfo .upgradeBtn`).disabled = false;
+        document.querySelector(`#palaceInfo .upgradeBtn`).classList.remove('disabled');
+    }
+
+    // Кнопка старт апгрейд в будинку робітників
+    if(isAnyUpgradePending || (data.worker_house_level >= data.palace_level) ||
+        (data.wood_amount < configData['workerHouseCostsWood'][data.worker_house_level-1] ||
+        data.food_amount < configData['workerHouseCostsFood'][data.worker_house_level-1])){
+
+        if(isAnyUpgradePending){
+            document.querySelector(`#workerHouseInfo .upgradeBtn`).textContent = 'Another upgrade in progress..';
+        }
+        else{
+            if(data.worker_house_level >= data.palace_level){
+                document.querySelector(`#workerHouseInfo .upgradeBtn`).textContent = 'Upgrade the palace first..';
+            }
+            else{
+                document.querySelector(`#workerHouseInfo .upgradeBtn`).textContent = 'Insufficient resources..';
+            }
+        }
+
+        document.querySelector(`#workerHouseInfo .upgradeBtn`).disabled = true;
+        document.querySelector(`#workerHouseInfo .upgradeBtn`).classList.add('disabled');
+    }
+    else{
+        document.querySelector(`#workerHouseInfo .upgradeBtn`).textContent = 'Upgrade';
+
+        document.querySelector(`#workerHouseInfo .upgradeBtn`).disabled = false;
+        document.querySelector(`#workerHouseInfo .upgradeBtn`).classList.remove('disabled');
+    }
+
+    // Кнопка старт апгрейд в фермі
+    if(isAnyUpgradePending || (data.food_farm_level >= data.palace_level) ||
+        data.food_extraction_in_progress ||
+        (data.wood_amount < configData['foodFarmCostsWood'][data.food_farm_level-1] ||
+        data.food_amount < configData['foodFarmCostsFood'][data.food_farm_level-1])){
+
+        if(isAnyUpgradePending){
+            document.querySelector(`#foodMineInfo .upgradeBtn`).textContent = 'Another upgrade in progress..';
+        }
+        else{
+            if(data.food_farm_level >= data.palace_level){
+                document.querySelector(`#foodMineInfo .upgradeBtn`).textContent = 'Upgrade the palace first..';
+            }
+            else{
+                if(data.wood_amount < configData['foodFarmCostsWood'][data.food_farm_level-1] ||
+                   data.food_amount < configData['foodFarmCostsFood'][data.food_farm_level-1])
+                {
+                    document.querySelector(`#foodMineInfo .upgradeBtn`).textContent = 'Insufficient resources..';
+                }
+                else{
+                    document.querySelector(`#foodMineInfo .upgradeBtn`).textContent = 'Food extraction..';
+                }
+            }
+        }
+
+        document.querySelector(`#foodMineInfo .upgradeBtn`).disabled = true;
+        document.querySelector(`#foodMineInfo .upgradeBtn`).classList.add('disabled');
+    }
+    else{
+        document.querySelector(`#foodMineInfo .upgradeBtn`).textContent = 'Upgrade';
+
+        document.querySelector(`#foodMineInfo .upgradeBtn`).disabled = false;
+        document.querySelector(`#foodMineInfo .upgradeBtn`).classList.remove('disabled');
+    }
+
+    // Кнопка старт апгрейд в лісопилці
+    if(isAnyUpgradePending || data.wood_mine_level >= data.palace_level ||
+        data.wood_extraction_in_progress ||
+        (data.wood_amount < configData['woodMineCostsWood'][data.wood_mine_level-1] ||
+        data.food_amount < configData['woodMineCostsFood'][data.wood_mine_level-1])){
+
+        if(isAnyUpgradePending){
+            document.querySelector(`#woodMineInfo .upgradeBtn`).textContent = 'Another upgrade in progress..';
+        }
+        else{
+            if(data.wood_mine_level >= data.palace_level){
+                document.querySelector(`#woodMineInfo .upgradeBtn`).textContent = 'Upgrade the palace first..';
+            }
+            else{
+                if(data.wood_amount < configData['woodMineCostsWood'][data.wood_mine_level-1] ||
+                   data.food_amount < configData['woodMineCostsFood'][data.wood_mine_level-1])
+                {
+                    document.querySelector(`#woodMineInfo .upgradeBtn`).textContent = 'Insufficient resources..';
+                }
+                else{
+                    document.querySelector(`#woodMineInfo .upgradeBtn`).textContent = 'Wood extraction..';
+                }
+            }
+        }
+
+        document.querySelector(`#woodMineInfo .upgradeBtn`).disabled = true;
+        document.querySelector(`#woodMineInfo .upgradeBtn`).classList.add('disabled');
+    }
+    else{
+        document.querySelector(`#woodMineInfo .upgradeBtn`).textContent = 'Upgrade';
+
+        document.querySelector(`#woodMineInfo .upgradeBtn`).disabled = false;
+        document.querySelector(`#woodMineInfo .upgradeBtn`).classList.remove('disabled');
+    }
+
+    // Кнопка старт майн в фермі
+    if(data.food_farm_upgrade_pending || (data.total_workers - data.workers_on_wood - data.workers_on_food == 0)){
+        if(data.food_farm_upgrade_pending){
+            document.querySelector(`#foodMineInfo .foodStartBtn`).textContent = 'Farm upgrade..';
+        }
+        else{
+            document.querySelector(`#foodMineInfo .foodStartBtn`).textContent = 'No free workers..';
+        }
+
+        document.querySelector(`#foodMineInfo .foodStartBtn`).disabled = true;
+        document.querySelector(`#foodMineInfo .foodStartBtn`).classList.add('disabled');
+    }
+    else{
+        document.querySelector(`#foodMineInfo .foodStartBtn`).textContent = 'Start Extraction';
+
+        document.querySelector(`#foodMineInfo .foodStartBtn`).disabled = false;
+        document.querySelector(`#foodMineInfo .foodStartBtn`).classList.remove('disabled');
+    }
+
+    // Кнопка старт майн в лісопилці
+    if(data.wood_mine_upgrade_pending || (data.total_workers - data.workers_on_wood - data.workers_on_food == 0)){
+        if(data.wood_mine_upgrade_pending){
+            document.querySelector(`#woodMineInfo .woodStartBtn`).textContent = 'Wood mine upgrade..';
+        }
+        else{
+            document.querySelector(`#woodMineInfo .woodStartBtn`).textContent = 'No free workers..';
+        }
+
+        document.querySelector(`#woodMineInfo .woodStartBtn`).disabled = true;
+        document.querySelector(`#woodMineInfo .woodStartBtn`).classList.add('disabled');
+    }
+    else{
+        document.querySelector(`#woodMineInfo .woodStartBtn`).textContent = 'Start Extraction';
+
+        document.querySelector(`#woodMineInfo .woodStartBtn`).disabled = false;
+        document.querySelector(`#woodMineInfo .woodStartBtn`).classList.remove('disabled');
+    }
 }
 
 // Функція для оновлення стану будівлі
-function updateBuildingState(building, isUpgradePending, startTime, duration, isAnyUpgradePending, woodCost, foodCost) {
+function updateBuildingState(building, isUpgradePending, startTime, duration, woodCost, foodCost) {
     // Оновлення вартості та тривалості апгрейду
     document.getElementById(`${building}WoodCost`).textContent = woodCost;
     document.getElementById(`${building}FoodCost`).textContent = foodCost;
@@ -136,18 +339,6 @@ function updateBuildingState(building, isUpgradePending, startTime, duration, is
     const upgradeBtn = document.querySelector(`#${building}Info .upgradeBtn`);
     const finishBtn = document.querySelector(`#${building}Info .finishUpgradeBtn`);
     const timerElement = document.querySelector(`#${building}Info .upgradeTimer`);
-
-    if (isAnyUpgradePending && !isUpgradePending) {
-        // Якщо інша будівля в процесі апгрейду - вимикаємо кнопки
-        upgradeBtn.disabled = true;
-        upgradeBtn.classList.add('disabled');
-        timerElement.style.display = 'none';
-        return;
-    } else {
-        // Якщо апгрейд не йде для цієї будівлі
-        upgradeBtn.disabled = false
-        upgradeBtn.classList.remove('disabled');
-    }
 
     if (!isUpgradePending) {
         // Якщо апгрейд не йде - показати кнопку "Upgrade"
@@ -175,8 +366,8 @@ function updateBuildingState(building, isUpgradePending, startTime, duration, is
     }
 }
 
-// Оновлення стану шахт
-function updateMinesState(data) {
+// Оновлення стану шахти їжі
+function updateFoodMinesState(data) {
     // Оновлюємо слайдери для ферми та лісопилки
     const availableWorkers = data.total_workers - data.workers_on_wood - data.workers_on_food;
 
@@ -184,15 +375,6 @@ function updateMinesState(data) {
     document.getElementById('foodMineTimePerWorker').textContent = configData.miningTime;
     document.getElementById('foodMineResourcePerWorker').textContent = configData.resourceGain + data.food_farm_level;
     document.getElementById('foodMineWorkersSlider').max = availableWorkers;
-
-    if(data.food_farm_upgrade_pending || !availableWorkers){
-        document.querySelector(`#foodMineInfo .foodStartBtn`).disabled = true;
-        document.querySelector(`#foodMineInfo .foodStartBtn`).classList.add('disabled');
-    }
-    else{
-        document.querySelector(`#foodMineInfo .foodStartBtn`).disabled = false;
-        document.querySelector(`#foodMineInfo .foodStartBtn`).classList.remove('disabled');
-    }
 
     if (data.food_extraction_in_progress) {
         // Якщо йде добич їжі
@@ -203,20 +385,17 @@ function updateMinesState(data) {
         document.querySelector(`#foodMineInfo .foodFinishBtn`).style.display = 'none';
         document.querySelector(`#foodMineInfo .foodStartBtn`).style.display = 'block';
     }
+}
+
+// Оновлення стану шахти дерева
+function updateWoodMinesState(data) {
+    // Оновлюємо слайдери для ферми та лісопилки
+    const availableWorkers = data.total_workers - data.workers_on_wood - data.workers_on_food;
 
     // Оновлюємо дані для лісопилки
     document.getElementById('woodMineTimePerWorker').textContent = configData.miningTime;
     document.getElementById('woodMineResourcePerWorker').textContent = configData.resourceGain + data.wood_mine_level;
     document.getElementById('woodMineWorkersSlider').max = availableWorkers;
-
-    if(data.wood_mine_upgrade_pending || !availableWorkers){
-        document.querySelector(`#woodMineInfo .woodStartBtn`).disabled = true;
-        document.querySelector(`#woodMineInfo .woodStartBtn`).classList.add('disabled');
-    }
-    else{
-        document.querySelector(`#woodMineInfo .woodStartBtn`).disabled = false;
-        document.querySelector(`#woodMineInfo .woodStartBtn`).classList.remove('disabled');
-    }
 
     if (data.wood_extraction_in_progress) {
         // Якщо йде добич дерева
@@ -229,7 +408,7 @@ function updateMinesState(data) {
     }
 }
 
-// Запуск таймера видобутку
+// Запуск таймера видобутку їжі
 function startFoodExtractionTimer(startTime, duration, workers) {
     const cleanedStartTime = startTime.split('.')[0] + 'Z';  // Додаємо 'Z' для позначення UTC
 
@@ -269,7 +448,7 @@ function startFoodExtractionTimer(startTime, duration, workers) {
     }
 }
 
-// Запуск таймера видобутку
+// Запуск таймера видобутку дерева
 function startWoodExtractionTimer(startTime, duration, workers) {
     const cleanedStartTime = startTime.split('.')[0] + 'Z';  // Додаємо 'Z' для позначення UTC
 
@@ -358,7 +537,7 @@ async function startUpgrade(building) {
         if (response.ok) {
             const data = await response.json();
             //alert(`${building.charAt(0).toUpperCase() + building.slice(1)} upgrade started!`);
-            getInitialData(); // Оновлюємо дані після апгрейду
+            updateUI(data, 'upgrade', building);
         } else {
             const error = await response.json();
             alert(`Error: ${error.detail}`);
@@ -394,7 +573,7 @@ async function finishUpgrade(building) {
         if (response.ok) {
             const data = await response.json();
             //alert(`${building.charAt(0).toUpperCase() + building.slice(1)} upgrade finished!`);
-            getInitialData(); // Оновлюємо дані після завершення апгрейду
+            updateUI(data, 'upgrade', building);
         } else {
             const error = await response.json();
             alert(`Error: ${error.detail}`);
@@ -424,7 +603,7 @@ async function startExtraction(resource, workers) {
         if (response.ok) {
             const data = await response.json();
          //   alert(`${workers} workers started ${resource} extraction!`);
-            getInitialData(); // Оновлюємо дані після старту видобутку
+            updateUI(data, 'mine', resource);
         } else {
             const error = await response.json();
           //  alert(`Error: ${error.detail}`);
@@ -454,7 +633,7 @@ async function finishExtraction(resource) {
         if (response.ok) {
             const data = await response.json();
           //  alert(`${resource.charAt(0).toUpperCase() + resource.slice(1)} extraction finished! Gained: ${data.total_food_gained || data.total_wood_gained}`);
-            getInitialData(); // Оновлюємо дані після завершення видобутку
+            updateUI(data, 'mine', resource);
         } else {
             const error = await response.json();
           //  alert(`Error: ${error.detail}`);
