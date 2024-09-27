@@ -375,6 +375,7 @@ function updateFoodMinesState(data) {
     document.getElementById('foodMineTimePerWorker').textContent = configData.miningTime;
     document.getElementById('foodMineResourcePerWorker').textContent = configData.resourceGain + data.food_farm_level;
     document.getElementById('foodMineWorkersSlider').max = availableWorkers;
+    document.getElementById('woodMineWorkersSlider').max = availableWorkers;
 
     if (data.food_extraction_in_progress) {
         // Якщо йде добич їжі
@@ -396,6 +397,7 @@ function updateWoodMinesState(data) {
     document.getElementById('woodMineTimePerWorker').textContent = configData.miningTime;
     document.getElementById('woodMineResourcePerWorker').textContent = configData.resourceGain + data.wood_mine_level;
     document.getElementById('woodMineWorkersSlider').max = availableWorkers;
+    document.getElementById('foodMineWorkersSlider').max = availableWorkers;
 
     if (data.wood_extraction_in_progress) {
         // Якщо йде добич дерева
