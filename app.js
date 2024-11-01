@@ -1,4 +1,4 @@
-const apiUrl = 'http://3.120.186.216:8000/'; // Зміни на свою адресу, якщо треба
+const apiUrl = 'https://3.120.186.216:8000/'; // Зміни на свою адресу, якщо треба
 let user_id, username; // Тепер user_id та username будуть отримуватися з Telegram
 
 let configData = null; // Змінна, яка буде доступна у всьому файлі
