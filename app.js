@@ -688,7 +688,15 @@ async function showRanking() {
 
             rankingData.forEach((user, index) => {
                 const item = document.createElement('p');
-                item.textContent = `${index + 1}. ${user.username} - Palace Level: ${user.palace_level}`;
+                item.innerHTML = `
+                    ${index + 1}. ${user.username}<br>
+                    Palace Level: ${user.palace_level}<br>
+                    Worker House Level: ${user.worker_house_level}<br>
+                    Farm Level: ${user.farm_level}<br>
+                    Wood Mine Level: ${user.woof_mine_level}<br>
+                    Food: ${user.food}<br>
+                    Wood: ${user.wood}
+                `;
                 rankingList.appendChild(item);
             });
         } else {
